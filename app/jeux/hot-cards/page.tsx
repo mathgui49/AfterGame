@@ -16,6 +16,7 @@ import { HARD_CARDS } from "@/data/hardCards";
 import { useCouple } from "@/lib/couple";
 import { useCustomCards } from "@/lib/customCards";
 import { pickProgressiveLevel, shouldUseHard } from "@/lib/progressive";
+import { renderCard } from "@/lib/templater";
 import { pick, shuffle } from "@/lib/utils";
 import { ArrowLeft, Flame, RefreshCw, SlidersHorizontal, Shuffle } from "lucide-react";
 import Link from "next/link";
@@ -227,9 +228,23 @@ export default function HotCardsPage() {
                       <LevelBadge level={current.level} />
                     </div>
 
-                    <p className="text-[22px] sm:text-[26px] leading-snug font-display font-medium">
-                      {current.prompt}
-                    </p>
+                    <p
+                      className="text-[22px] sm:text-[26px] leading-snug font-display font-medium [&_b]:text-ember-400 [&_b]:font-bold [&_b]:not-italic"
+                      dangerouslySetInnerHTML={{
+                        __html: renderCard(
+                          current.prompt,
+                          turn === 0
+                            ? { name: config.p1 || "Toi", sex: config.p1Sex }
+                            : { name: config.p2 || "Partenaire", sex: config.p2Sex },
+                          turn === 0
+                            ? { name: config.p2 || "Partenaire", sex: config.p2Sex }
+                            : { name: config.p1 || "Toi", sex: config.p1Sex },
+                          { name: config.p1 || "Toi", sex: config.p1Sex },
+                          { name: config.p2 || "Partenaire", sex: config.p2Sex }
+                        ),
+                      }}
+                    />
+
 
                     <div className="flex items-center justify-between text-xs text-white/40">
                       <span>

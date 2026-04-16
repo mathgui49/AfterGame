@@ -6,26 +6,34 @@ const STORAGE_KEY = "aftergame:couple_v2";
 
 export type HeatLevel = 1 | 2 | 3;
 
+export type Sex = "M" | "F" | "X"; // Homme / Femme / Non-précisé
+
 export interface CoupleConfig {
   p1: string;
   p2: string;
+  p1Sex: Sex;
+  p2Sex: Sex;
   heat: HeatLevel[]; // one or more levels — picked randomly when drawing cards
   dim: boolean; // dimmed/tamisée UI mode
   hard: boolean; // unlocks explicit "Hard" content pool
   progressive: boolean; // overrides heat: heat rises as the session progresses
   progressCount: number; // cards drawn during the current session
-  limits: string[]; // body-zone IDs the couple marks as off-limits
+  p1Limits: string[]; // body-zone IDs P1 marks as off-limits ON P1
+  p2Limits: string[]; // body-zone IDs P2 marks as off-limits ON P2
 }
 
 const DEFAULT_CONFIG: CoupleConfig = {
   p1: "",
   p2: "",
+  p1Sex: "X",
+  p2Sex: "X",
   heat: [1, 2, 3],
   dim: false,
   hard: false,
   progressive: false,
   progressCount: 0,
-  limits: [],
+  p1Limits: [],
+  p2Limits: [],
 };
 
 export const HEAT_LABELS: Record<HeatLevel, { name: string; emoji: string }> = {

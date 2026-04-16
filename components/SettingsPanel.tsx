@@ -14,9 +14,9 @@ import {
   TrendingUp,
   RotateCcw,
 } from "lucide-react";
-import { HeatLevel, useCouple } from "@/lib/couple";
+import { HeatLevel, Sex, useCouple } from "@/lib/couple";
 import { progressionState } from "@/lib/progressive";
-import { NameInput } from "./CoupleSetup";
+import { PlayerField } from "./CoupleSetup";
 import { HeatSelector } from "./HeatSelector";
 import { CustomCardsManager } from "./CustomCardsManager";
 import { BodyLimits } from "./BodyLimits";
@@ -27,6 +27,8 @@ export function SettingsPanel() {
   const [mounted, setMounted] = useState(false);
   const [p1, setP1] = useState(config.p1);
   const [p2, setP2] = useState(config.p2);
+  const [p1Sex, setP1Sex] = useState<Sex>(config.p1Sex);
+  const [p2Sex, setP2Sex] = useState<Sex>(config.p2Sex);
   const [heat, setHeat] = useState<HeatLevel[]>(config.heat);
 
   useEffect(() => setMounted(true), []);
@@ -36,9 +38,11 @@ export function SettingsPanel() {
     if (open) {
       setP1(config.p1);
       setP2(config.p2);
+      setP1Sex(config.p1Sex);
+      setP2Sex(config.p2Sex);
       setHeat(config.heat);
     }
-  }, [open, config.p1, config.p2, config.heat]);
+  }, [open, config.p1, config.p2, config.p1Sex, config.p2Sex, config.heat]);
 
   // Lock body scroll when panel is open
   useEffect(() => {
@@ -52,7 +56,7 @@ export function SettingsPanel() {
 
   const save = () => {
     if (!p1.trim() || !p2.trim()) return;
-    update({ p1: p1.trim(), p2: p2.trim(), heat });
+    update({ p1: p1.trim(), p2: p2.trim(), p1Sex, p2Sex, heat });
     setOpen(false);
   };
 
@@ -122,17 +126,21 @@ export function SettingsPanel() {
                 <h3 className="font-display text-xl font-bold">Le duo</h3>
               </div>
               <div className="grid grid-cols-1 gap-3">
-                <NameInput
+                <PlayerField
                   label="Joueur 1"
-                  value={p1}
-                  onChange={setP1}
                   color="from-ember-500 to-velvet-600"
+                  name={p1}
+                  onName={setP1}
+                  sex={p1Sex}
+                  onSex={setP1Sex}
                 />
-                <NameInput
+                <PlayerField
                   label="Joueur 2"
-                  value={p2}
-                  onChange={setP2}
                   color="from-velvet-500 to-midnight-600"
+                  name={p2}
+                  onName={setP2}
+                  sex={p2Sex}
+                  onSex={setP2Sex}
                 />
               </div>
             </section>

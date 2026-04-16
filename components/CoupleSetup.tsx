@@ -4,14 +4,17 @@ import { useState } from "react";
 import { usePathname } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import { Heart, Sparkles, Users } from "lucide-react";
-import { HeatLevel, useCouple } from "@/lib/couple";
+import { HeatLevel, Sex, useCouple } from "@/lib/couple";
 import { HeatSelector } from "./HeatSelector";
+import { SexSelector } from "./SexSelector";
 
 export function CoupleSetup() {
   const { config, update, ready, isInitialized } = useCouple();
   const pathname = usePathname();
   const [p1, setP1] = useState(config.p1);
   const [p2, setP2] = useState(config.p2);
+  const [p1Sex, setP1Sex] = useState<Sex>(config.p1Sex);
+  const [p2Sex, setP2Sex] = useState<Sex>(config.p2Sex);
   const [heat, setHeat] = useState<HeatLevel[]>(config.heat);
 
   // Only gate on game pages — landing & info pages stay unblocked so new
@@ -24,7 +27,7 @@ export function CoupleSetup() {
 
   const handleSave = () => {
     if (!canSave) return;
-    update({ p1: p1.trim(), p2: p2.trim(), heat });
+    update({ p1: p1.trim(), p2: p2.trim(), p1Sex, p2Sex, heat });
   };
 
   return (
@@ -66,18 +69,22 @@ export function CoupleSetup() {
             </p>
 
             {/* Names */}
-            <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <NameInput
+            <div className="mt-6 space-y-3">
+              <PlayerField
                 label="Joueur 1"
-                value={p1}
-                onChange={setP1}
                 color="from-ember-500 to-velvet-600"
+                name={p1}
+                onName={setP1}
+                sex={p1Sex}
+                onSex={setP1Sex}
               />
-              <NameInput
+              <PlayerField
                 label="Joueur 2"
-                value={p2}
-                onChange={setP2}
                 color="from-velvet-500 to-midnight-600"
+                name={p2}
+                onName={setP2}
+                sex={p2Sex}
+                onSex={setP2Sex}
               />
             </div>
 
@@ -111,6 +118,9 @@ export function CoupleSetup() {
   );
 }
 
+/**
+ * Simple name input (kept for backwards compat where sex isn't needed).
+ */
 export function NameInput({
   label,
   value,
@@ -141,6 +151,53 @@ export function NameInput({
             placeholder="Prénom"
             className="w-full bg-transparent border-none outline-none text-white placeholder:text-white/25 font-medium text-base"
           />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/**
+ * Full player field: avatar, name input, sex selector below. Used in
+ * CoupleSetup + SettingsPanel.
+ */
+export function PlayerField({
+  label,
+  color,
+  name,
+  onName,
+  sex,
+  onSex,
+}: {
+  label: string;
+  color: string;
+  name: string;
+  onName: (v: string) => void;
+  sex: Sex;
+  onSex: (s: Sex) => void;
+}) {
+  return (
+    <div className={`rounded-2xl p-0.5 bg-gradient-to-br ${color}`}>
+      <div className="rounded-[calc(1rem-2px)] bg-[#0d0513]/90 px-3 py-2.5 flex items-center gap-3">
+        <div
+          className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gradient-to-br ${color} font-display font-bold text-white`}
+        >
+          {(name || "?").charAt(0).toUpperCase()}
+        </div>
+        <div className="flex-1 min-w-0">
+          <div className="text-[10px] uppercase tracking-[0.2em] text-white/40">
+            {label}
+          </div>
+          <input
+            value={name}
+            onChange={(e) => onName(e.target.value)}
+            maxLength={16}
+            placeholder="Prénom"
+            className="w-full bg-transparent border-none outline-none text-white placeholder:text-white/25 font-medium text-base"
+          />
+          <div className="mt-1.5">
+            <SexSelector value={sex} onChange={onSex} />
+          </div>
         </div>
       </div>
     </div>

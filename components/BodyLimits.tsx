@@ -1,7 +1,8 @@
 "use client";
 
+import { useState } from "react";
 import { useCouple } from "@/lib/couple";
-import { Shield, RotateCcw } from "lucide-react";
+import { Shield, RotateCcw, EyeOff } from "lucide-react";
 
 type View = "front" | "back";
 
@@ -9,8 +10,8 @@ interface Zone {
   id: string;
   label: string;
   view: View;
-  x: number; // % of 100-wide viewBox
-  y: number; // % of 220-tall viewBox
+  x: number;
+  y: number;
 }
 
 const ZONES: Zone[] = [
@@ -37,23 +38,31 @@ const ZONES: Zone[] = [
   { id: "calves", label: "Mollets", view: "back", x: 50, y: 180 },
 ];
 
-// Simplified human silhouette — head circle + torso + limbs as a single path.
-// viewBox 0 0 100 220 (matches ZONES coords).
 const SILHOUETTE_PATH =
   "M 50 5 C 45 5 41 9 41 15 C 41 20 43 24 46 25 L 45 30 L 36 33 C 32 35 28 39 27 44 L 22 70 L 20 95 L 25 107 L 28 98 L 30 74 L 32 60 L 32 80 L 30 100 L 28 140 L 28 180 L 32 210 L 38 211 L 42 182 L 44 145 L 46 115 L 50 115 L 54 115 L 56 145 L 58 182 L 62 211 L 68 210 L 72 180 L 72 140 L 70 100 L 68 80 L 68 60 L 70 74 L 72 98 L 75 107 L 80 95 L 78 70 L 73 44 C 72 39 68 35 64 33 L 55 30 L 54 25 C 57 24 59 20 59 15 C 59 9 55 5 50 5 Z";
 
 export function BodyLimits() {
   const { config, update } = useCouple();
-  const limits = new Set(config.limits);
+  const [active, setActive] = useState<"p1" | "p2">("p1");
+  const [privacy, setPrivacy] = useState(false);
+
+  const nameP1 = config.p1 || "Joueur 1";
+  const nameP2 = config.p2 || "Joueur 2";
+  const limits = new Set(active === "p1" ? config.p1Limits : config.p2Limits);
 
   const toggle = (id: string) => {
     const next = new Set(limits);
     if (next.has(id)) next.delete(id);
     else next.add(id);
-    update({ limits: Array.from(next) });
+    const arr = Array.from(next);
+    if (active === "p1") update({ p1Limits: arr });
+    else update({ p2Limits: arr });
   };
 
-  const resetAll = () => update({ limits: [] });
+  const resetAll = () => {
+    if (active === "p1") update({ p1Limits: [] });
+    else update({ p2Limits: [] });
+  };
 
   return (
     <div>
@@ -62,16 +71,50 @@ export function BodyLimits() {
         <h3 className="font-display text-xl font-bold">Limites du duo</h3>
         {limits.size > 0 && (
           <span className="ml-auto text-[11px] text-ember-400">
-            {limits.size} zone{limits.size > 1 ? "s" : ""} interdite
-            {limits.size > 1 ? "s" : ""}
+            {limits.size} zone{limits.size > 1 ? "s" : ""} off
           </span>
         )}
       </div>
       <p className="text-xs text-white/55 mb-3 leading-snug">
-        Tape sur un point pour passer du <b className="text-emerald-400">vert</b>{" "}
-        (ok) au <b className="text-ember-400">rouge</b> (à éviter). Les limites
-        sont toujours sacrées — même en plein jeu.
+        Chacun·e paramètre <b>son propre corps</b>. Tape un point pour passer
+        du <b className="text-emerald-400">vert</b> (ok) au{" "}
+        <b className="text-ember-400">rouge</b> (à éviter). Les limites sont
+        sacrées — toujours.
       </p>
+
+      {/* Privacy hint */}
+      <div className="mb-3 rounded-2xl border border-white/10 bg-white/5 p-3 text-[11px] text-white/65 leading-snug flex items-start gap-2">
+        <EyeOff className="h-3.5 w-3.5 mt-0.5 shrink-0 text-velvet-300" />
+        <span>
+          Tu peux remplir ton corps sans montrer l&apos;écran à
+          l&apos;autre — iel découvrira tes envies au fur et à mesure des
+          cartes.
+          <button
+            onClick={() => setPrivacy((p) => !p)}
+            className="ml-2 underline text-velvet-300 hover:text-white transition"
+          >
+            {privacy ? "Tout afficher" : "Masquer l'autre corps"}
+          </button>
+        </span>
+      </div>
+
+      {/* Player tabs */}
+      <div className="mb-3 inline-flex w-full rounded-full border border-white/10 bg-white/5 p-0.5 text-xs">
+        <TabButton
+          active={active === "p1"}
+          onClick={() => setActive("p1")}
+          label={nameP1}
+          count={config.p1Limits.length}
+          gradient="from-ember-500 to-velvet-600"
+        />
+        <TabButton
+          active={active === "p2"}
+          onClick={() => setActive("p2")}
+          label={nameP2}
+          count={config.p2Limits.length}
+          gradient="from-velvet-500 to-midnight-600"
+        />
+      </div>
 
       <div className="grid grid-cols-2 gap-3">
         <Silhouette
@@ -79,12 +122,14 @@ export function BodyLimits() {
           zones={ZONES.filter((z) => z.view === "front")}
           limits={limits}
           onToggle={toggle}
+          hidden={privacy}
         />
         <Silhouette
           view="back"
           zones={ZONES.filter((z) => z.view === "back")}
           limits={limits}
           onToggle={toggle}
+          hidden={privacy}
         />
       </div>
 
@@ -118,10 +163,43 @@ export function BodyLimits() {
           onClick={resetAll}
           className="mt-3 inline-flex items-center gap-1.5 text-[11px] text-white/50 hover:text-emerald-400 transition"
         >
-          <RotateCcw className="h-3 w-3" /> Tout remettre en vert
+          <RotateCcw className="h-3 w-3" /> Tout remettre en vert pour{" "}
+          {active === "p1" ? nameP1 : nameP2}
         </button>
       )}
     </div>
+  );
+}
+
+function TabButton({
+  active,
+  onClick,
+  label,
+  count,
+  gradient,
+}: {
+  active: boolean;
+  onClick: () => void;
+  label: string;
+  count: number;
+  gradient: string;
+}) {
+  return (
+    <button
+      onClick={onClick}
+      className={`flex-1 inline-flex items-center justify-center gap-1.5 rounded-full px-3 py-2 transition truncate ${
+        active
+          ? `bg-gradient-to-r ${gradient} text-white font-semibold`
+          : "text-white/60 hover:text-white"
+      }`}
+    >
+      <span className="truncate">{label}</span>
+      {count > 0 && (
+        <span className="inline-flex items-center justify-center text-[10px] font-bold rounded-full bg-white/25 text-white px-1.5 py-0.5 min-w-[16px]">
+          {count}
+        </span>
+      )}
+    </button>
   );
 }
 
@@ -130,11 +208,13 @@ function Silhouette({
   zones,
   limits,
   onToggle,
+  hidden,
 }: {
   view: View;
   zones: Zone[];
   limits: Set<string>;
   onToggle: (id: string) => void;
+  hidden: boolean;
 }) {
   return (
     <div className="relative rounded-2xl border border-white/10 bg-gradient-to-b from-midnight-950/60 to-velvet-950/60 p-3 overflow-hidden">
@@ -145,6 +225,7 @@ function Silhouette({
         viewBox="0 0 100 220"
         className="w-full h-auto"
         preserveAspectRatio="xMidYMid meet"
+        style={{ filter: hidden ? "blur(12px)" : "none" }}
       >
         <defs>
           <linearGradient id={`body-${view}`} x1="0" y1="0" x2="0" y2="1">
@@ -163,11 +244,10 @@ function Silhouette({
           return (
             <g
               key={z.id}
-              onClick={() => onToggle(z.id)}
-              style={{ cursor: "pointer" }}
+              onClick={() => !hidden && onToggle(z.id)}
+              style={{ cursor: hidden ? "default" : "pointer" }}
             >
               <title>{z.label}</title>
-              {/* Larger invisible hit area for easy tapping */}
               <circle cx={z.x} cy={z.y} r={6} fill="transparent" />
               <circle
                 cx={z.x}

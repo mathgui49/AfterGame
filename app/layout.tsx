@@ -4,6 +4,7 @@ import { AgeGate } from "@/components/AgeGate";
 import { CoupleSetup } from "@/components/CoupleSetup";
 import { DimApplier } from "@/components/DimApplier";
 import { HardBackground } from "@/components/HardBackground";
+import { InstallPrompt } from "@/components/InstallPrompt";
 import { siteUrl } from "@/lib/site";
 
 const BASE_URL = siteUrl();
@@ -131,6 +132,7 @@ export default function RootLayout({
         <div className="relative z-10">
           <AgeGate />
           <CoupleSetup />
+          <InstallPrompt />
           {children}
         </div>
       </body>
