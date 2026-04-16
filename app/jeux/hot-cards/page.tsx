@@ -51,14 +51,22 @@ export default function HotCardsPage() {
       ...customCards,
       ...(config.hard ? HARD_CARDS : []),
     ];
-    const filtered = all.filter(
-      (c) =>
-        (!config.heat.length || config.heat.includes(c.level)) &&
-        (!categories.length || categories.includes(c.category))
-    );
+    const oneShot =
+      config.relationship === "premier-soir" ||
+      config.relationship === "plan-cul";
+    const filtered = all.filter((c) => {
+      if (config.heat.length && !config.heat.includes(c.level)) return false;
+      if (categories.length && !categories.includes(c.category)) return false;
+      // Weekly/monthly defis need a recurring relationship
+      if (oneShot && c.category === "defis") return false;
+      if (c.relationships && !c.relationships.includes(config.relationship)) {
+        return false;
+      }
+      return true;
+    });
     return shuffle(filtered);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [categories, seed, config.heat, config.hard, customCards]);
+  }, [categories, seed, config.heat, config.hard, config.relationship, customCards]);
 
   useEffect(() => {
     setIndex(0);
@@ -242,7 +250,8 @@ export default function HotCardsPage() {
                             ? { name: config.p2 || "Partenaire", sex: config.p2Sex }
                             : { name: config.p1 || "Toi", sex: config.p1Sex },
                           { name: config.p1 || "Toi", sex: config.p1Sex },
-                          { name: config.p2 || "Partenaire", sex: config.p2Sex }
+                          { name: config.p2 || "Partenaire", sex: config.p2Sex },
+                          config.relationship
                         ),
                       }}
                     />

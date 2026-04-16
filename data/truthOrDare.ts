@@ -42,7 +42,37 @@ export const TRUTHS: TDItem[] = [
   { id: "t-x-07", level: "extreme", text: "Quelle scène imaginerais-tu si tu devais diriger un film coquin sur nous ?" },
   { id: "t-x-08", level: "extreme", text: "Quel rôle de domination ou soumission préfères-tu en secret ?" },
   { id: "t-x-09", level: "extreme", text: "Quelle est la position qu'on n'a jamais faite mais que tu meurs d'envie d'essayer ?" },
+
+  // ============ EXPANSION ============
+  // SOFT
+  { id: "t-s-11", level: "soft", text: "Quelle est la déclaration la plus romantique qu'on t'ait faite ?" },
+  { id: "t-s-12", level: "soft", text: "Quel geste simple de ma part te rassure toujours ?" },
+  { id: "t-s-13", level: "soft", text: "Quelle chanson te ramène à un souvenir avec moi ?" },
+  { id: "t-s-14", level: "soft", text: "Quel est ton souvenir de vacances préféré avec moi ?" },
+  { id: "t-s-15", level: "soft", text: "Quelle qualité de toi t'a attiré·e chez moi en retour ?" },
+  { id: "t-s-16", level: "soft", text: "Si on devait déménager ensemble dans une ville au hasard, tu choisirais laquelle ?" },
+  { id: "t-s-17", level: "soft", text: "Quelle attention quotidienne te touche le plus ?" },
+  { id: "t-s-18", level: "soft", text: "Qu'est-ce qui te manque le plus quand je ne suis pas là ?" },
+
+  // HOT
+  { id: "t-h-13", level: "hot", text: "Quelle est la tenue la plus sexy que tu aimerais essayer sur moi ?" },
+  { id: "t-h-14", level: "hot", text: "Quelle est la dernière fois où tu as rêvé de moi ? Raconte." },
+  { id: "t-h-15", level: "hot", text: "Quel est le geste le plus inattendu qui t'a déjà excité·e pendant la journée ?" },
+  { id: "t-h-16", level: "hot", text: "Si je te massais là maintenant, où voudrais-tu que je commence ?" },
+  { id: "t-h-17", level: "hot", text: "Quelle est la chose la plus sexy que je t'ai envoyée en message ?" },
+  { id: "t-h-18", level: "hot", text: "Quelle est ta pensée récurrente quand tu t'endors à côté de moi ?" },
+  { id: "t-h-19", level: "hot", text: "Dans quelle tenue je te fais le plus d'effet ?" },
+  { id: "t-h-20", level: "hot", text: "Quel souvenir avec moi tu repasses dans ta tête pour te faire plaisir ?" },
+
+  // EXTREME
+  { id: "t-x-10", level: "extreme", text: "Raconte-moi le scénario qui te fait jouir le plus vite." },
+  { id: "t-x-11", level: "extreme", text: "Quel est le rêve coquin le plus étrange que tu as fait avec moi ?" },
+  { id: "t-x-12", level: "extreme", text: "Si tu pouvais me filmer dans une position précise, ce serait laquelle ?" },
+  { id: "t-x-13", level: "extreme", text: "Quelle est la partie de notre intimité que tu aimerais explorer plus ?" },
+  { id: "t-x-14", level: "extreme", text: "Est-ce qu'il y a un geste que je fais sans le savoir qui te fait perdre la tête ?" },
+  { id: "t-x-15", level: "extreme", text: "Quel est le plus long que tu as tenu sans jouir par toi-même ?" },
 ];
+
 
 export const DARES: TDItem[] = [
   // SOFT
@@ -82,4 +112,25 @@ export const DARES: TDItem[] = [
   { id: "d-x-08", level: "extreme", text: "Masse-le / la avec de l'huile pendant 3 minutes, focus zones sensibles." },
   { id: "d-x-09", level: "extreme", text: "Donne 3 ordres coquins qu'il / elle devra exécuter un par un." },
   { id: "d-x-10", level: "extreme", text: "Fais durer un baiser pendant 3 minutes, sans rien dire ni vous éloigner." },
+
+  // ===== SOFT (batch 2) =====
+  { id: "d-s-11", level: "soft", text: "Fais-lui un compliment sur un détail qu'il / elle n'a jamais entendu." },
+  { id: "d-s-12", level: "soft", text: "Prends-le / la dans tes bras et balance-toi doucement pendant 30 secondes." },
+  { id: "d-s-13", level: "soft", text: "Pose ton front contre le sien et respire à son rythme." },
+  { id: "d-s-14", level: "soft", text: "Prends sa main et pose-la sur ton cœur 20 secondes." },
+  { id: "d-s-15", level: "soft", text: "Embrasse-le / la sur les paupières, une à la fois." },
+
+  // ===== HOT (batch 2) =====
+  { id: "d-h-13", level: "hot", text: "Glisse ta main sous son haut et caresse son ventre pendant 30 secondes." },
+  { id: "d-h-14", level: "hot", text: "Embrasse sa poitrine à travers le tissu, langue bien présente." },
+  { id: "d-h-15", level: "hot", text: "Fais-lui un suçon dans le cou ou la clavicule." },
+  { id: "d-h-16", level: "hot", text: "Dis-lui ce que tu as envie de lui faire en 3 phrases, sans bouger." },
+  { id: "d-h-17", level: "hot", text: "Déboutonne son pantalon avec les dents — juste déboutonner." },
+
+  // ===== EXTREME (batch 2) =====
+  { id: "d-x-11", level: "extreme", text: "Raconte-lui, pendant 1 minute sans interruption, ce qui va se passer dans les 10 prochaines minutes." },
+  { id: "d-x-12", level: "extreme", text: "Prends-le / la par les hanches et presse-toi contre lui / elle — laisse sentir ton envie." },
+  { id: "d-x-13", level: "extreme", text: "Guide sa main exactement où tu veux — et ne lui lâche pas pendant 1 minute." },
+  { id: "d-x-14", level: "extreme", text: "Bande-lui les yeux et fais-lui deviner 3 sensations (doigts, glaçon, bouche, plume…)." },
+  { id: "d-x-15", level: "extreme", text: "Attrape son t-shirt à deux mains et rapproche-le / la de toi d'un coup sec." },
 ];

@@ -17,24 +17,23 @@ export interface ProgressionState {
 
 /**
  * Compute the current progression state from the number of cards already drawn
- * this session. Smooth ramp from "all level 1" to "only hard level 3".
+ * this session. Slow, sensual ramp — orgasm-level content only arrives late.
  *
- * Milestones (approximate):
- *  - 0-4 cards   : mostly Doux
- *  - 5-12        : Doux + Chaud
- *  - 13-19       : Chaud + Brûlant starts to appear
- *  - 20-29       : Brûlant dominant, Hard starts unlocking
- *  - 30-39       : Only Brûlant, Hard frequent
- *  - 40+         : Only Hard level 3
+ * Milestones (≈):
+ *   0-10 cards    : Tendre (level 1 dominant)
+ *   10-25         : Tiède (1 + some 2)
+ *   25-45         : Chaud (2 dominant, 3 rare)
+ *   45-70         : Brûlant (3 rising)
+ *   70+           : Incandescent (3 + Hard)
  */
 export function progressionState(count: number): ProgressionState {
-  const t = Math.min(Math.max(count, 0) / 40, 1);
+  const t = Math.min(Math.max(count, 0) / 80, 1);
 
-  // Weight for level 1 (Doux): starts at 1, drops to 0 by t≈0.5
-  const w1 = Math.max(0, 1 - t * 2);
-  // Weight for level 3 (Brûlant): grows from 0 to 1 as t → 1
-  const w3 = Math.max(0, t * 1.6 - 0.15);
-  // Level 2 (Chaud) fills what's left
+  // Level 1 (Doux): starts at 1, fades out by t ≈ 0.55 (count 44)
+  const w1 = Math.max(0, 1 - t * 1.85);
+  // Level 3 (Brûlant): grows slowly, only meaningful after t ≈ 0.4 (count 32)
+  const w3 = Math.max(0, (t - 0.35) * 1.7);
+  // Level 2 (Chaud) fills the middle
   const w2 = Math.max(0, 1 - w1 - w3);
 
   const total = w1 + w2 + w3 || 1;
@@ -44,14 +43,14 @@ export function progressionState(count: number): ProgressionState {
     w3 / total,
   ];
 
-  // Hard unlocks at t ~ 0.5 and ramps up to 1.0 at t = 1
-  const hardFraction = Math.max(0, Math.min(1, (t - 0.5) * 2));
+  // Hard unlocks at t ≈ 0.7 (count 56) and ramps up to 1.0 by t = 1.0 (count 80).
+  const hardFraction = Math.max(0, Math.min(1, (t - 0.7) * 3.3));
 
   let tier: Tier;
-  if (count < 5) tier = "Tendre";
-  else if (count < 13) tier = "Tiède";
-  else if (count < 20) tier = "Chaud";
-  else if (count < 30) tier = "Brûlant";
+  if (count < 10) tier = "Tendre";
+  else if (count < 25) tier = "Tiède";
+  else if (count < 45) tier = "Chaud";
+  else if (count < 70) tier = "Brûlant";
   else tier = "Incandescent";
 
   return {

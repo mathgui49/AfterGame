@@ -8,6 +8,15 @@ export type HeatLevel = 1 | 2 | 3;
 
 export type Sex = "M" | "F"; // Homme / Femme
 
+/**
+ * Type of relationship — drives which cards are relevant.
+ * - "premier-soir": first night, one-time encounter
+ * - "plan-cul": casual recurring hookup, no commitment
+ * - "debut": early-stage couple (a few weeks to months)
+ * - "couple": established couple (years)
+ */
+export type Relationship = "premier-soir" | "plan-cul" | "debut" | "couple";
+
 export interface CoupleConfig {
   p1: string;
   p2: string;
@@ -22,6 +31,7 @@ export interface CoupleConfig {
   p2Limits: string[]; // same, on P2
   p1Refuses: string[]; // practice IDs P1 refuses to DO
   p2Refuses: string[]; // same, on P2
+  relationship: Relationship;
 }
 
 const DEFAULT_CONFIG: CoupleConfig = {
@@ -38,6 +48,33 @@ const DEFAULT_CONFIG: CoupleConfig = {
   p2Limits: [],
   p1Refuses: [],
   p2Refuses: [],
+  relationship: "couple",
+};
+
+export const RELATIONSHIP_LABELS: Record<
+  Relationship,
+  { label: string; emoji: string; desc: string }
+> = {
+  "premier-soir": {
+    label: "Premier soir",
+    emoji: "✨",
+    desc: "Ce soir seulement, peut-être sans lendemain.",
+  },
+  "plan-cul": {
+    label: "Plan cul régulier",
+    emoji: "🔥",
+    desc: "On se revoit, mais sans attaches.",
+  },
+  debut: {
+    label: "Début de relation",
+    emoji: "💞",
+    desc: "Quelques semaines ou mois — on se découvre.",
+  },
+  couple: {
+    label: "Couple établi",
+    emoji: "💕",
+    desc: "On se connaît par cœur, on veut raviver.",
+  },
 };
 
 export const HEAT_LABELS: Record<HeatLevel, { name: string; emoji: string }> = {

@@ -110,4 +110,52 @@ export const HARD_CARDS: HotCard[] = [
   { id: "h-s-06", category: "sijepouvais", level: 3, prompt: "{you}, et si je pouvais te masser et finir fatalement par {partner:oralv} — tu acceptes ?" },
   { id: "h-s-07", category: "sijepouvais", level: 3, prompt: "{you}, et si je pouvais t'écrire le scénario d'une nuit parfaite entre nous, tu commencerais par quoi ?" },
   { id: "h-s-08", category: "sijepouvais", level: 3, prompt: "{you}, et si je pouvais t'enregistrer un message vocal coquin — tu voudrais l'écouter avant de te coucher chaque soir ?" },
+
+  // =================== EXPANSION POOL 2 ===================
+  // ===== ACTION — crude (batch 2) =====
+  { id: "h-a-34", category: "action", level: 3, prompt: "{you}, lèche ses tétons en même temps que ta main s'occupe de son {partner:sexe}." },
+  { id: "h-a-35", category: "action", level: 3, prompt: "{you}, embrasse son bas-ventre en t'arrêtant à 1 cm de son {partner:sexe} — fais-le / la attendre." },
+  { id: "h-a-36", category: "action", level: 3, prompt: "{you}, suce son index pendant qu'il / elle caresse son propre {partner:sexe}." },
+  { id: "h-a-37", category: "action", level: 3, prompt: "{you}, fais glisser ta langue de son pubis à son nombril, puis descends sans prévenir." },
+  { id: "h-a-38", category: "action", level: 3, prompt: "{you}, tire doucement ses cheveux vers toi pour qu'il / elle te regarde en jouissant." },
+  { id: "h-a-39", category: "action", level: 3, prompt: "{you}, fais-lui une douche de baisers partout sauf sur son {partner:sexe} pendant 2 minutes." },
+  { id: "h-a-40", category: "action", level: 3, prompt: "{you}, attrape-lui les fesses à pleines mains pendant que tu l'embrasses langoureusement." },
+  { id: "h-a-41", category: "action", level: 3, prompt: "{you}, colle-toi complètement nu·e à lui / elle et reste immobile 30 secondes — laisse le désir monter." },
+  { id: "h-a-42", category: "action", level: 3, prompt: "{you}, bouche son {partner:sexe} avec ta main pendant 10 secondes puis remplace ta main par ta bouche." },
+  { id: "h-a-43", category: "action", level: 3, prompt: "{you}, allonge-toi sur le ventre et laisse-le / la explorer ton dos + tes fesses avec bouche et mains." },
+  { id: "h-a-44", category: "action", level: 3, prompt: "{you}, caresse-le / la avec la pointe de tes ongles du cou jusqu'aux cuisses." },
+  { id: "h-a-45", category: "action", level: 3, prompt: "{you}, fais-lui un massage du cuir chevelu pendant que tu te frottes contre lui / elle." },
+  { id: "h-a-46", category: "action", level: 3, prompt: "{you}, imite sur sa peau ce que tu veux faire à son {partner:sexe}, en plus doux." },
+  { id: "h-a-47", category: "action", level: 3, prompt: "{you}, retire lentement un de tes propres vêtements et pose-le sur son visage pour couvrir ses yeux." },
+  { id: "h-a-48", category: "action", level: 3, prompt: "{you}, murmure « regarde-moi » avant chaque orgasme que tu lui donnes." },
+
+  // ===== VÉRITÉ — crude (batch 2) =====
+  { id: "h-v-21", category: "verite", level: 3, prompt: "{you}, si tu devais noter ton orgasme avec moi de 1 à 10, quel est ton meilleur ? Pourquoi ?" },
+  { id: "h-v-22", category: "verite", level: 3, prompt: "{you}, décris-moi ce qui se passe dans ton corps la seconde avant que tu jouisses." },
+  { id: "h-v-23", category: "verite", level: 3, prompt: "{you}, tu préfères que je te fasse jouir vite et fort, ou lentement et longtemps ?" },
+  { id: "h-v-24", category: "verite", level: 3, prompt: "{you}, c'est quoi la pensée la plus osée que tu as eue en me voyant aujourd'hui ?" },
+  { id: "h-v-25", category: "verite", level: 3, prompt: "{you}, combien de fois tu t'es retenu·e de me sauter dessus dans un lieu public ?" },
+  { id: "h-v-26", category: "verite", level: 3, prompt: "{you}, quelle texture tu préfères dans ta bouche — peau, langue, doigts, autre ?" },
+  { id: "h-v-27", category: "verite", level: 3, prompt: "{you}, s'il fallait choisir : te voir me faire plaisir, ou me laisser te manger toute la nuit ?" },
+  { id: "h-v-28", category: "verite", level: 3, prompt: "{you}, quel mot d'ordre te ferait obéir instantanément ?" },
+  { id: "h-v-29", category: "verite", level: 3, prompt: "{you}, quelle est la chose la plus cochonne que tu as déjà dite à voix haute pendant l'amour ?" },
+  { id: "h-v-30", category: "verite", level: 3, prompt: "{you}, tu préfères faire l'amour le matin au réveil ou en pleine nuit ? Pourquoi ?" },
+
+  // ===== POSITIONS — explicit (batch 2) =====
+  { id: "h-p-09", category: "positions", level: 3, prompt: "La pirouette : un quart de tour pour enchaîner cuillère → levrette sans se retirer." },
+  { id: "h-p-10", category: "positions", level: 3, prompt: "Le dessert : l'un·e allongé·e, l'autre à genoux en-dessous — alterne langue et doigts." },
+  { id: "h-p-11", category: "positions", level: 3, prompt: "Assis·e sur le rebord du canapé, l'autre à genoux au sol — accès total à ton {partner:sexe}." },
+  { id: "h-p-12", category: "positions", level: 3, prompt: "Le 69 debout contre un mur — l'un·e porté·e, l'autre tenant les cuisses." },
+
+  // ===== QUI EST LE PLUS (batch 2) =====
+  { id: "h-q-08", category: "quiestleplus", level: 3, prompt: "Qui craque le plus vite quand on lui mordille l'oreille ?" },
+  { id: "h-q-09", category: "quiestleplus", level: 3, prompt: "Qui est le / la plus doué·e pour le suspens (teasing prolongé) ?" },
+  { id: "h-q-10", category: "quiestleplus", level: 3, prompt: "Qui reviendrait le / la plus souvent à l'assaut après un premier orgasme ?" },
+  { id: "h-q-11", category: "quiestleplus", level: 3, prompt: "Qui serait le / la plus chaud·e pour une soirée miroir au-dessus du lit ?" },
+
+  // ===== SI JE POUVAIS (batch 2) =====
+  { id: "h-s-09", category: "sijepouvais", level: 3, prompt: "{you}, et si je pouvais te guider au doigt et à l'œil pendant 20 minutes, tu me laisserais faire ?" },
+  { id: "h-s-10", category: "sijepouvais", level: 3, prompt: "{you}, et si je pouvais t'interdire de jouir avant que je te l'autorise, tu tiendrais combien ?" },
+  { id: "h-s-11", category: "sijepouvais", level: 3, prompt: "{you}, et si je pouvais t'offrir une heure avec un jouet à mon choix, tu accepterais ?" },
+  { id: "h-s-12", category: "sijepouvais", level: 3, prompt: "{you}, et si je pouvais te raconter un fantasme à voix haute pendant que tu te {you:touche}, tu essaierais ?" },
 ];

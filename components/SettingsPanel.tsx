@@ -22,6 +22,7 @@ import { HeatSelector } from "./HeatSelector";
 import { CustomCardsManager } from "./CustomCardsManager";
 import { BodyLimits } from "./BodyLimits";
 import { PracticesManager } from "./PracticesManager";
+import { RelationshipSelector } from "./RelationshipSelector";
 
 export function SettingsPanel() {
   const { config, update, clear } = useCouple();
@@ -157,6 +158,11 @@ export function SettingsPanel() {
                   onSex={setP2Sex}
                 />
               </div>
+            </section>
+
+            {/* Relationship */}
+            <section>
+              <RelationshipSelector />
             </section>
 
             {/* Progressive */}
