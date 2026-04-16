@@ -123,7 +123,7 @@ export function useCouple() {
 
 /** Pick one allowed level at random according to the couple's heat config. */
 export function pickLevel(config: CoupleConfig): HeatLevel {
-  const heat = config.heat.length ? config.heat : [1, 2, 3];
+  const heat: HeatLevel[] = config.heat.length ? config.heat : [1, 2, 3];
   return heat[Math.floor(Math.random() * heat.length)];
 }
 
