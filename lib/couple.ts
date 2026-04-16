@@ -14,6 +14,7 @@ export interface CoupleConfig {
   hard: boolean; // unlocks explicit "Hard" content pool
   progressive: boolean; // overrides heat: heat rises as the session progresses
   progressCount: number; // cards drawn during the current session
+  limits: string[]; // body-zone IDs the couple marks as off-limits
 }
 
 const DEFAULT_CONFIG: CoupleConfig = {
@@ -24,6 +25,7 @@ const DEFAULT_CONFIG: CoupleConfig = {
   hard: false,
   progressive: false,
   progressCount: 0,
+  limits: [],
 };
 
 export const HEAT_LABELS: Record<HeatLevel, { name: string; emoji: string }> = {

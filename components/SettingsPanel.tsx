@@ -19,6 +19,7 @@ import { progressionState } from "@/lib/progressive";
 import { NameInput } from "./CoupleSetup";
 import { HeatSelector } from "./HeatSelector";
 import { CustomCardsManager } from "./CustomCardsManager";
+import { BodyLimits } from "./BodyLimits";
 
 export function SettingsPanel() {
   const { config, update, clear } = useCouple();
@@ -240,6 +241,11 @@ export function SettingsPanel() {
                 </div>
                 <Toggle active={config.dim} />
               </button>
+            </section>
+
+            {/* Body limits */}
+            <section>
+              <BodyLimits />
             </section>
 
             {/* Custom cards */}
