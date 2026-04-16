@@ -3,23 +3,73 @@ import "./globals.css";
 import { AgeGate } from "@/components/AgeGate";
 import { CoupleSetup } from "@/components/CoupleSetup";
 import { DimApplier } from "@/components/DimApplier";
+import { siteUrl } from "@/lib/site";
+
+const BASE_URL = siteUrl();
 
 export const metadata: Metadata = {
-  title: "AfterGame — Le jeu hot pour couples audacieux",
+  metadataBase: new URL(BASE_URL),
+  title: {
+    default: "AfterGame — Le jeu hot pour couples audacieux",
+    template: "%s · AfterGame",
+  },
   description:
-    "Plus de 400 cartes, défis, dés coquins, quiz et bons à réclamer. Un jeu pour couples qui veulent pimenter leurs soirées.",
+    "10 modes de jeu, 146+ cartes coquines, scénarios guidés, roulette des gages, bataille coquine, playlists Spotify intégrées, mode lumière tamisée. Pour les couples qui veulent pimenter leurs soirées. 18+.",
+  applicationName: "AfterGame",
   keywords: [
+    "AfterGame",
     "jeu couple",
-    "jeu hot",
+    "jeu hot couple",
     "jeu adulte",
-    "soirée couple",
+    "jeu coquin",
     "cartes coquines",
-    "action vérité",
+    "action vérité couple",
+    "soirée couple",
+    "Osmooz",
+    "Kama Sutra",
+    "scénario coquin",
+    "roulette des gages",
+    "bataille coquine",
+    "jeu érotique",
+    "jeu sensuel",
   ],
+  authors: [{ name: "AfterGame" }],
+  creator: "AfterGame",
+  publisher: "AfterGame",
+  category: "Games",
+  classification: "18+",
+  alternates: {
+    canonical: "/",
+    languages: { "fr-FR": "/" },
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
   openGraph: {
-    title: "AfterGame",
-    description: "Le jeu hot pour couples audacieux. 18+",
     type: "website",
+    locale: "fr_FR",
+    url: "/",
+    siteName: "AfterGame",
+    title: "AfterGame — Rallumez la flamme",
+    description:
+      "10 modes de jeu, 146+ cartes, scénarios guidés, playlists Spotify intégrées. Le jeu hot pour couples audacieux. 18+",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "AfterGame — Rallumez la flamme",
+    description:
+      "10 modes de jeu, 146+ cartes, scénarios guidés, playlists Spotify intégrées. Pour couples audacieux. 18+",
+  },
+  other: {
+    "rating": "adult",
+    "content-rating": "mature",
   },
 };
 
@@ -28,6 +78,27 @@ export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   maximumScale: 5,
+  colorScheme: "dark",
+};
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Game",
+  name: "AfterGame",
+  description:
+    "Jeu hot pour couples : 10 modes, 146+ cartes, scénarios guidés, playlists Spotify intégrées et mode lumière tamisée.",
+  url: BASE_URL,
+  image: `${BASE_URL}/opengraph-image`,
+  inLanguage: "fr",
+  genre: ["Couple game", "Party game", "Adult game"],
+  audience: {
+    "@type": "PeopleAudience",
+    suggestedMinAge: 18,
+  },
+  gamePlatform: ["Web", "iOS Safari", "Android Chrome"],
+  numberOfPlayers: { "@type": "QuantitativeValue", minValue: 2, maxValue: 2 },
+  isAccessibleForFree: true,
+  publisher: { "@type": "Organization", name: "AfterGame" },
 };
 
 export default function RootLayout({
@@ -39,10 +110,18 @@ export default function RootLayout({
     <html lang="fr">
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link
+          rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossOrigin="anonymous"
+        />
         <link
           href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,500;0,700;0,800;1,500;1,700&display=swap"
           rel="stylesheet"
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
       </head>
       <body>
