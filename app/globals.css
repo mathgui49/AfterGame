@@ -1,0 +1,179 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --font-display: "Playfair Display", serif;
+  --font-body: "Inter", sans-serif;
+  --bg: #0d0513;
+  --fg: #fef3f4;
+}
+
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-body);
+  min-height: 100%;
+  overflow-x: hidden;
+}
+
+body {
+  background:
+    radial-gradient(1000px 600px at 10% -10%, rgba(228, 51, 122, 0.25), transparent 60%),
+    radial-gradient(800px 500px at 110% 10%, rgba(128, 88, 242, 0.22), transparent 55%),
+    radial-gradient(1200px 700px at 50% 120%, rgba(237, 15, 35, 0.18), transparent 55%),
+    linear-gradient(180deg, #0a0410 0%, #1a061a 40%, #0d0513 100%);
+  background-attachment: fixed;
+}
+
+/* scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #c41d63, #6f3be6);
+  border-radius: 10px;
+}
+
+/* selection */
+::selection {
+  background: #e3337a;
+  color: #fff;
+}
+
+.font-display {
+  font-family: var(--font-display);
+}
+
+/* Glass card */
+.glass {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.08) 0%,
+    rgba(255, 255, 255, 0.02) 100%
+  );
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.glass-strong {
+  background: linear-gradient(
+    135deg,
+    rgba(228, 51, 122, 0.12) 0%,
+    rgba(128, 88, 242, 0.08) 100%
+  );
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+/* Glow */
+.glow-ember {
+  box-shadow: 0 0 40px -10px rgba(237, 15, 35, 0.55), 0 0 80px -30px rgba(228, 51, 122, 0.5);
+}
+.glow-velvet {
+  box-shadow: 0 0 40px -10px rgba(228, 51, 122, 0.6), 0 0 80px -30px rgba(128, 88, 242, 0.45);
+}
+
+/* Button gradient */
+.btn-hot {
+  background: linear-gradient(135deg, #ed0f23 0%, #c41d63 50%, #6f3be6 100%);
+  background-size: 200% 200%;
+  transition: background-position 0.5s ease, transform 0.2s ease, box-shadow 0.3s ease;
+}
+.btn-hot:hover {
+  background-position: 100% 100%;
+  transform: translateY(-1px);
+  box-shadow: 0 10px 40px -10px rgba(237, 15, 35, 0.7);
+}
+.btn-hot:active {
+  transform: translateY(0);
+}
+
+/* Card flip */
+.perspective {
+  perspective: 1600px;
+}
+.preserve-3d {
+  transform-style: preserve-3d;
+}
+.backface-hidden {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+.rotate-y-180 {
+  transform: rotateY(180deg);
+}
+
+/* Shimmer text */
+.shimmer-text {
+  background: linear-gradient(
+    90deg,
+    #ffd9dc 0%,
+    #ff6266 25%,
+    #e3337a 50%,
+    #8058f2 75%,
+    #ffd9dc 100%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shimmer 3.5s linear infinite;
+}
+
+/* Noise overlay */
+.noise::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.03;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='140' height='140'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)' opacity='0.65'/></svg>");
+}
+
+/* Flame SVG effects */
+.flame-filter {
+  filter: drop-shadow(0 0 8px rgba(237, 15, 35, 0.55))
+    drop-shadow(0 0 20px rgba(228, 51, 122, 0.4));
+}
+
+/* Prevent text selection on game surfaces */
+.no-select {
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* Safe area */
+.safe-bottom {
+  padding-bottom: max(env(safe-area-inset-bottom), 1rem);
+}
+
+/* Lumière tamisée */
+html.dimmed {
+  filter: brightness(0.55) saturate(1.08) contrast(0.96);
+  transition: filter 0.6s ease;
+}
+html.dimmed body {
+  background:
+    radial-gradient(800px 500px at 10% -10%, rgba(228, 51, 122, 0.22), transparent 60%),
+    radial-gradient(600px 400px at 110% 10%, rgba(128, 88, 242, 0.18), transparent 55%),
+    linear-gradient(180deg, #05020a 0%, #0f030f 45%, #06010a 100%) !important;
+}
+html.dimmed .glass {
+  background: rgba(0, 0, 0, 0.35);
+}
