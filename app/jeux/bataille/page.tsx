@@ -6,7 +6,12 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { ArrowLeft, Swords, Trophy, RotateCcw } from "lucide-react";
 import Link from "next/link";
-import { BattleCard, SUIT_META, buildBattleDeck } from "@/data/battle";
+import {
+  BattleCard,
+  SUIT_META,
+  buildBattleDeck,
+  renderDare,
+} from "@/data/battle";
 import { shuffle } from "@/lib/utils";
 import { useCouple } from "@/lib/couple";
 
@@ -22,13 +27,10 @@ export default function BattlePage() {
   const [scoreA, setScoreA] = useState(0);
   const [scoreB, setScoreB] = useState(0);
   const [round, setRound] = useState<Round | null>(null);
-  const [flipped, setFlipped] = useState(false);
+  // revealed = cards are showing their FRONT (face). Start hidden.
+  const [revealed, setRevealed] = useState(false);
 
   const deck = useMemo(() => {
-    // Keep full 52 but bias dares via heat filter on resulting dares
-    // We'll still draw randomly; if drawn card's dare-level isn't allowed,
-    // we allow it (battle = chance). The bias only affects the RESULT text
-    // using heat-preferred level via config.
     return shuffle(buildBattleDeck());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [deckSeed]);
@@ -39,45 +41,59 @@ export default function BattlePage() {
   const nameB = config.p2 || "Joueur B";
 
   const drawRound = () => {
-    setFlipped(false);
+    // Hide the current cards first, then reveal the new ones after a
+    // short delay so the flip animation is visible.
+    setRevealed(false);
+
     if (deckIndex + 2 > deck.length) {
       setDeckSeed((s) => s + 1);
       setDeckIndex(0);
+      // A new deck is coming; the useEffect on deckSeed will take care of it.
       return;
     }
-    const p1 = deck[deckIndex];
-    const p2 = deck[deckIndex + 1];
-    const winner: 1 | 2 | 0 =
-      p1.rank > p2.rank ? 1 : p1.rank < p2.rank ? 2 : 0;
-    setRound({ p1, p2, winner });
-    setDeckIndex((i) => i + 2);
-    window.setTimeout(() => setFlipped(true), 450);
-    if (winner === 1) setScoreA((s) => s + 1);
-    if (winner === 2) setScoreB((s) => s + 1);
+
+    window.setTimeout(() => {
+      const p1 = deck[deckIndex];
+      const p2 = deck[deckIndex + 1];
+      const winner: 1 | 2 | 0 =
+        p1.rank > p2.rank ? 1 : p1.rank < p2.rank ? 2 : 0;
+      setRound({ p1, p2, winner });
+      setDeckIndex((i) => i + 2);
+      if (winner === 1) setScoreA((s) => s + 1);
+      if (winner === 2) setScoreB((s) => s + 1);
+      // Trigger the flip to the front after the cards are set.
+      window.setTimeout(() => setRevealed(true), 60);
+    }, 320);
   };
 
   const reset = () => {
     setScoreA(0);
     setScoreB(0);
     setRound(null);
+    setRevealed(false);
     setDeckIndex(0);
     setDeckSeed((s) => s + 1);
   };
 
-  const winnerName = round
-    ? round.winner === 1
-      ? nameA
-      : round.winner === 2
-      ? nameB
-      : null
-    : null;
-  const loserName = round
-    ? round.winner === 1
-      ? nameB
-      : round.winner === 2
-      ? nameA
-      : null
-    : null;
+  const winnerName =
+    round && round.winner !== 0
+      ? round.winner === 1
+        ? nameA
+        : nameB
+      : null;
+  const loserName =
+    round && round.winner !== 0
+      ? round.winner === 1
+        ? nameB
+        : nameA
+      : null;
+
+  const winningDare =
+    round && round.winner !== 0
+      ? round.winner === 1
+        ? round.p1.dare
+        : round.p2.dare
+      : null;
 
   return (
     <>
@@ -101,7 +117,7 @@ export default function BattlePage() {
             Bataille Coquine
           </h1>
           <p className="mt-1 text-sm text-white/60">
-            52 cartes. Plus forte carte impose le défi à l&apos;autre.
+            52 cartes. La plus forte carte impose le défi à l&apos;autre.
           </p>
         </div>
 
@@ -124,20 +140,20 @@ export default function BattlePage() {
           <CardSlot
             card={round?.p1}
             side={nameA}
-            flipped={flipped}
+            revealed={revealed}
             winner={round?.winner === 1}
           />
           <CardSlot
             card={round?.p2}
             side={nameB}
-            flipped={flipped}
+            revealed={revealed}
             winner={round?.winner === 2}
           />
         </div>
 
         {/* Result */}
         <AnimatePresence mode="wait">
-          {round && flipped && (
+          {round && revealed && (
             <motion.div
               key={`res-${deckIndex}`}
               initial={{ opacity: 0, y: 12 }}
@@ -154,14 +170,14 @@ export default function BattlePage() {
               <p className="mt-3 font-display text-xl sm:text-2xl font-medium leading-snug">
                 {round.winner === 0 ? (
                   <>
-                    Vous tirez la même valeur. Offrez-vous un baiser long, puis
-                    repiochez.
+                    Vous tirez la même valeur. Offrez-vous un baiser long,
+                    puis repiochez.
                   </>
                 ) : (
                   <>
                     <span className="text-ember-400">{loserName}</span> exécute
                     :{" "}
-                    {round.winner === 1 ? round.p1.dare : round.p2.dare}
+                    {renderDare(winningDare!, winnerName!, loserName!)}
                   </>
                 )}
               </p>
@@ -218,12 +234,12 @@ function ScorePanel({
 function CardSlot({
   card,
   side,
-  flipped,
+  revealed,
   winner,
 }: {
   card?: BattleCard;
   side: string;
-  flipped: boolean;
+  revealed: boolean;
   winner?: boolean;
 }) {
   if (!card) {
@@ -234,19 +250,21 @@ function CardSlot({
     );
   }
   const suitMeta = SUIT_META[card.suit];
+  // revealed=true → front visible (rotateY 180 so the already-180° front faces us)
+  // revealed=false → back visible (rotateY 0)
   return (
     <div className="perspective">
       <motion.div
         animate={{
-          rotateY: flipped ? 0 : 180,
-          scale: winner && flipped ? 1.04 : 1,
+          rotateY: revealed ? 180 : 0,
+          scale: winner && revealed ? 1.04 : 1,
         }}
-        transition={{ duration: 0.6 }}
+        transition={{ duration: 0.7, ease: [0.2, 0.8, 0.2, 1] }}
         className={`preserve-3d relative aspect-[2/3] w-full ${
-          winner && flipped ? "glow-ember" : ""
+          winner && revealed ? "glow-ember" : ""
         }`}
       >
-        {/* Back */}
+        {/* Back (visible when not revealed) */}
         <div className="backface-hidden absolute inset-0 rounded-2xl p-0.5 bg-gradient-to-br from-ember-500 to-velvet-600">
           <div className="rounded-[calc(1rem-2px)] h-full w-full bg-[#0d0513]/95 flex items-center justify-center relative overflow-hidden noise">
             <div className="text-center">
@@ -262,7 +280,7 @@ function CardSlot({
             </div>
           </div>
         </div>
-        {/* Front */}
+        {/* Front (visible when revealed) */}
         <div
           className={`backface-hidden rotate-y-180 absolute inset-0 rounded-2xl p-0.5 bg-gradient-to-br ${suitMeta.color}`}
         >

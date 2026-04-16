@@ -1,6 +1,8 @@
 // Bataille Coquine — inspired by Kama Sutra-style naughty battle card games.
 // Each round, both sides draw a card with a numeric value. Highest imposes the dare.
 // Suits are thematic. Higher rank = hotter dare.
+// `dare` text uses {W} for the winner's name and {L} for the loser's name,
+// substituted at render time with real couple prénoms.
 
 export type Suit = "cœur" | "flamme" | "soie" | "nuit";
 export interface BattleCard {
@@ -19,19 +21,19 @@ export const SUIT_META: Record<Suit, { emoji: string; color: string }> = {
 };
 
 const DARES_BY_RANK: Record<number, { text: string; level: 1 | 2 | 3 }> = {
-  2: { text: "Un câlin de 15 secondes au / à la gagnant·e.", level: 1 },
-  3: { text: "Un bisou esquimau (frotter les nez) pendant 10 secondes.", level: 1 },
-  4: { text: "Un compliment coquin à voix haute au / à la gagnant·e.", level: 1 },
-  5: { text: "Un bisou sur la joue, puis sur l'autre, puis sur le front.", level: 1 },
-  6: { text: "Massage des épaules du / de la gagnant·e pendant 60 secondes.", level: 1 },
-  7: { text: "Embrasse la nuque du / de la gagnant·e pendant 15 secondes.", level: 2 },
-  8: { text: "Mordille doucement le lobe d'oreille du / de la gagnant·e.", level: 2 },
-  9: { text: "Danse un slow collé·e avec le / la gagnant·e pendant 30 secondes.", level: 2 },
-  10: { text: "Enlève un vêtement (au choix du / de la gagnant·e).", level: 2 },
-  11: { text: "Embrasse le / la gagnant·e langoureusement pendant 20 secondes.", level: 2 }, // Valet
-  12: { text: "Le / la gagnant·e guide tes mains sur son corps pendant 1 minute.", level: 3 }, // Dame
-  13: { text: "Strip-tease de 30 secondes devant le / la gagnant·e.", level: 3 }, // Roi
-  14: { text: "Le / la gagnant·e choisit une carte de 'bon' à te faire exécuter ce soir.", level: 3 }, // As
+  2: { text: "Un câlin de 15 secondes offert à {W}.", level: 1 },
+  3: { text: "Un bisou esquimau (frotter les nez) avec {W} pendant 10 secondes.", level: 1 },
+  4: { text: "Un compliment coquin à voix haute, adressé à {W}.", level: 1 },
+  5: { text: "Un bisou sur la joue, puis sur l'autre, puis sur le front de {W}.", level: 1 },
+  6: { text: "Massage des épaules de {W} pendant 60 secondes.", level: 1 },
+  7: { text: "Embrasse la nuque de {W} pendant 15 secondes.", level: 2 },
+  8: { text: "Mordille doucement le lobe d'oreille de {W}.", level: 2 },
+  9: { text: "Danse un slow collé·e avec {W} pendant 30 secondes.", level: 2 },
+  10: { text: "Enlève un vêtement (au choix de {W}).", level: 2 },
+  11: { text: "Embrasse {W} langoureusement pendant 20 secondes.", level: 2 }, // Valet
+  12: { text: "{W} guide tes mains sur son corps pendant 1 minute.", level: 3 }, // Dame
+  13: { text: "Strip-tease de 30 secondes devant {W}.", level: 3 }, // Roi
+  14: { text: "{W} choisit une carte de 'bon' à te faire exécuter ce soir.", level: 3 }, // As
 };
 
 export function labelFromRank(rank: number): string {
@@ -58,4 +60,13 @@ export function buildBattleDeck(): BattleCard[] {
     }
   }
   return deck;
+}
+
+/** Substitute {W} (winner) and {L} (loser) placeholders in a dare string. */
+export function renderDare(
+  dare: string,
+  winner: string,
+  loser: string
+): string {
+  return dare.replaceAll("{W}", winner).replaceAll("{L}", loser);
 }

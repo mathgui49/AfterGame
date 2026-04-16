@@ -9,7 +9,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     [
       { path: "", priority: 1.0, freq: "weekly" },
       { path: "/a-propos", priority: 0.6, freq: "monthly" },
-      { path: "/ambiance", priority: 0.8, freq: "monthly" },
       { path: "/jeux/hot-cards", priority: 0.9, freq: "monthly" },
       { path: "/jeux/action-verite", priority: 0.9, freq: "monthly" },
       { path: "/jeux/des-coquins", priority: 0.8, freq: "monthly" },

@@ -12,6 +12,8 @@ export interface CoupleConfig {
   heat: HeatLevel[]; // one or more levels — picked randomly when drawing cards
   dim: boolean; // dimmed/tamisée UI mode
   hard: boolean; // unlocks explicit "Hard" content pool
+  progressive: boolean; // overrides heat: heat rises as the session progresses
+  progressCount: number; // cards drawn during the current session
 }
 
 const DEFAULT_CONFIG: CoupleConfig = {
@@ -20,6 +22,8 @@ const DEFAULT_CONFIG: CoupleConfig = {
   heat: [1, 2, 3],
   dim: false,
   hard: false,
+  progressive: false,
+  progressCount: 0,
 };
 
 export const HEAT_LABELS: Record<HeatLevel, { name: string; emoji: string }> = {
@@ -103,7 +107,13 @@ export function useCouple() {
   const config = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
 
   const update = useCallback((patch: Partial<CoupleConfig>) => {
-    currentState = { ...currentState, ...patch };
+    const next: CoupleConfig = { ...currentState, ...patch };
+    // Hard mode is only meaningful when the Brûlant (level 3) pool is active.
+    // If heat changes and no longer includes 3, force hard off for coherence.
+    if (!next.heat.includes(3)) {
+      next.hard = false;
+    }
+    currentState = next;
     try {
       if (typeof window !== "undefined") {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(currentState));

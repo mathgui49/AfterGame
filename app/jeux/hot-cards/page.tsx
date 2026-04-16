@@ -15,7 +15,8 @@ import {
 import { HARD_CARDS } from "@/data/hardCards";
 import { useCouple } from "@/lib/couple";
 import { useCustomCards } from "@/lib/customCards";
-import { shuffle } from "@/lib/utils";
+import { pickProgressiveLevel, shouldUseHard } from "@/lib/progressive";
+import { pick, shuffle } from "@/lib/utils";
 import { ArrowLeft, Flame, RefreshCw, SlidersHorizontal, Shuffle } from "lucide-react";
 import Link from "next/link";
 
@@ -31,7 +32,7 @@ const ALL_CATEGORIES: Category[] = [
 ];
 
 export default function HotCardsPage() {
-  const { config } = useCouple();
+  const { config, update } = useCouple();
   const { cards: customCards } = useCustomCards();
   const [categories, setCategories] = useState<Category[]>([...ALL_CATEGORIES]);
   const [flipped, setFlipped] = useState(false);
@@ -39,6 +40,7 @@ export default function HotCardsPage() {
   const [seed, setSeed] = useState(0);
   const [showFilters, setShowFilters] = useState(false);
   const [turn, setTurn] = useState<0 | 1>(0);
+  const [progressiveCard, setProgressiveCard] = useState<HotCard | null>(null);
 
   const deck: HotCard[] = useMemo(() => {
     const all: HotCard[] = [
@@ -60,13 +62,29 @@ export default function HotCardsPage() {
     setFlipped(false);
   }, [seed, config.heat]);
 
-  const current = deck[index];
+  // Draw the first progressive card on mount if progressive mode is active.
+  useEffect(() => {
+    if (config.progressive && !progressiveCard) {
+      setProgressiveCard(drawProgressiveCard(config.progressCount, categories, customCards));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [config.progressive]);
+
+  const current = config.progressive ? progressiveCard : deck[index];
 
   const nextCard = () => {
     setFlipped(false);
     setTurn((t) => (t === 0 ? 1 : 0));
     setTimeout(() => {
-      setIndex((i) => (deck.length ? (i + 1) % deck.length : 0));
+      if (config.progressive) {
+        const nextCount = (config.progressCount ?? 0) + 1;
+        update({ progressCount: nextCount });
+        setProgressiveCard(
+          drawProgressiveCard(nextCount, categories, customCards)
+        );
+      } else {
+        setIndex((i) => (deck.length ? (i + 1) % deck.length : 0));
+      }
     }, 250);
   };
 
@@ -253,4 +271,33 @@ export default function HotCardsPage() {
       <Footer />
     </>
   );
+}
+
+/**
+ * Progressive draw: pick a level from the progression tier, decide if this
+ * draw pulls from the Hard pool, then return a random matching card.
+ */
+function drawProgressiveCard(
+  count: number,
+  categories: Category[],
+  customCards: HotCard[]
+): HotCard | null {
+  const level = pickProgressiveLevel(count);
+  const useHard = shouldUseHard(count, level);
+  const pool: HotCard[] = useHard
+    ? HARD_CARDS
+    : [...HOT_CARDS, ...customCards];
+  const filtered = pool.filter(
+    (c) =>
+      c.level === level &&
+      (!categories.length || categories.includes(c.category))
+  );
+  if (filtered.length === 0) {
+    // Fallback: ignore level constraint but keep category.
+    const fb = (useHard ? HARD_CARDS : [...HOT_CARDS, ...customCards]).filter(
+      (c) => !categories.length || categories.includes(c.category)
+    );
+    return fb.length ? pick(fb) : null;
+  }
+  return pick(filtered);
 }

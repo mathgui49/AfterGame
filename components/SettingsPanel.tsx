@@ -11,12 +11,14 @@ import {
   Trash2,
   Moon,
   Flame,
+  TrendingUp,
+  RotateCcw,
 } from "lucide-react";
 import { HeatLevel, useCouple } from "@/lib/couple";
+import { progressionState } from "@/lib/progressive";
 import { NameInput } from "./CoupleSetup";
 import { HeatSelector } from "./HeatSelector";
 import { CustomCardsManager } from "./CustomCardsManager";
-import { PlaylistsCustomizer } from "./PlaylistsCustomizer";
 
 export function SettingsPanel() {
   const { config, update, clear } = useCouple();
@@ -55,6 +57,16 @@ export function SettingsPanel() {
 
   const toggleDim = () => update({ dim: !config.dim });
   const toggleHard = () => update({ hard: !config.hard });
+  const toggleProgressive = () => {
+    if (config.progressive) {
+      update({ progressive: false });
+    } else {
+      // Starting progressive: reset the counter and make sure heat covers all
+      // levels so the ramp can fully play out.
+      update({ progressive: true, progressCount: 0, heat: [1, 2, 3] });
+    }
+  };
+  const resetProgress = () => update({ progressCount: 0 });
 
   const reset = () => {
     if (confirm("Réinitialiser prénoms, chaleur, mode hard et cartes perso ?")) {
@@ -124,47 +136,87 @@ export function SettingsPanel() {
               </div>
             </section>
 
-            {/* Heat */}
+            {/* Progressive */}
             <section>
               <div className="flex items-center gap-2 mb-3">
-                <Sparkles className="h-4 w-4 text-velvet-300" />
-                <h3 className="font-display text-xl font-bold">Chaleur</h3>
-              </div>
-              <HeatSelector heat={heat} onChange={setHeat} />
-            </section>
-
-            {/* Hard */}
-            <section>
-              <div className="flex items-center gap-2 mb-3">
-                <Flame className="h-4 w-4 text-ember-500" />
-                <h3 className="font-display text-xl font-bold">Mode Hard</h3>
+                <TrendingUp className="h-4 w-4 text-velvet-300" />
+                <h3 className="font-display text-xl font-bold">
+                  Mode progressif
+                </h3>
               </div>
               <button
-                onClick={toggleHard}
+                onClick={toggleProgressive}
                 className={`w-full text-left rounded-2xl px-4 py-3 border transition flex items-center gap-3 ${
-                  config.hard
-                    ? "border-ember-500 bg-ember-500/15"
+                  config.progressive
+                    ? "border-ember-500 bg-ember-500/10"
                     : "border-white/10 hover:bg-white/5"
                 }`}
               >
                 <div className="flex-1 min-w-0">
                   <div className="font-semibold text-sm">
-                    Contenu explicite & cru
+                    La chaleur monte d&apos;elle-même
                   </div>
                   <div className="text-xs text-white/55 leading-snug">
-                    Active un pool de défis et vérités très directs, avec des
-                    mots crus. Arrière-plan sensuel activé.
+                    Plus tu joues, plus les cartes deviennent chaudes. Le mode
+                    Hard s&apos;active au fur et à mesure, jusqu&apos;à devenir
+                    permanent.
                   </div>
                 </div>
-                <Toggle active={config.hard} />
+                <Toggle active={config.progressive} />
               </button>
-              {config.hard && (
-                <p className="mt-2 text-[11px] text-ember-400/80 leading-snug">
-                  ⚠️ Rappel : toujours avec consentement mutuel. Un simple
-                  &laquo; pas ce soir &raquo; suffit à passer une carte.
-                </p>
+              {config.progressive && (
+                <ProgressiveStatus
+                  count={config.progressCount}
+                  onReset={resetProgress}
+                />
               )}
             </section>
+
+            {/* Heat — manuel (masqué quand progressif actif) */}
+            {!config.progressive && (
+              <section>
+                <div className="flex items-center gap-2 mb-3">
+                  <Sparkles className="h-4 w-4 text-velvet-300" />
+                  <h3 className="font-display text-xl font-bold">Chaleur</h3>
+                </div>
+                <HeatSelector heat={heat} onChange={setHeat} />
+              </section>
+            )}
+
+            {/* Hard — masqué en mode progressif (auto-géré), sinon gated par niveau 3 */}
+            {!config.progressive && heat.includes(3) && (
+              <section>
+                <div className="flex items-center gap-2 mb-3">
+                  <Flame className="h-4 w-4 text-ember-500" />
+                  <h3 className="font-display text-xl font-bold">Mode Hard</h3>
+                </div>
+                <button
+                  onClick={toggleHard}
+                  className={`w-full text-left rounded-2xl px-4 py-3 border transition flex items-center gap-3 ${
+                    config.hard
+                      ? "border-ember-500 bg-ember-500/15"
+                      : "border-white/10 hover:bg-white/5"
+                  }`}
+                >
+                  <div className="flex-1 min-w-0">
+                    <div className="font-semibold text-sm">
+                      Contenu explicite & cru
+                    </div>
+                    <div className="text-xs text-white/55 leading-snug">
+                      Active un pool de défis et vérités très directs, avec
+                      des mots crus. Arrière-plan sensuel activé.
+                    </div>
+                  </div>
+                  <Toggle active={config.hard} />
+                </button>
+                {config.hard && (
+                  <p className="mt-2 text-[11px] text-ember-400/80 leading-snug">
+                    ⚠️ Rappel : toujours avec consentement mutuel. Un simple
+                    &laquo; pas ce soir &raquo; suffit à passer une carte.
+                  </p>
+                )}
+              </section>
+            )}
 
             {/* Ambience */}
             <section>
@@ -193,11 +245,6 @@ export function SettingsPanel() {
             {/* Custom cards */}
             <section>
               <CustomCardsManager />
-            </section>
-
-            {/* Playlists */}
-            <section>
-              <PlaylistsCustomizer />
             </section>
 
             <div className="pt-4 border-t border-white/5 flex flex-col gap-3">
@@ -232,6 +279,47 @@ export function SettingsPanel() {
       </button>
       {mounted ? createPortal(overlay, document.body) : null}
     </>
+  );
+}
+
+function ProgressiveStatus({
+  count,
+  onReset,
+}: {
+  count: number;
+  onReset: () => void;
+}) {
+  const state = progressionState(count);
+  const pct = Math.round(state.progress * 100);
+  return (
+    <div className="mt-3 rounded-2xl border border-white/10 bg-white/[0.03] p-3 space-y-3">
+      <div className="flex items-center justify-between text-xs">
+        <div className="text-white/60">
+          Tier :{" "}
+          <span className="font-semibold text-ember-400">{state.tier}</span>
+          {state.hardUnlocked && (
+            <span className="ml-2 text-[10px] uppercase tracking-widest text-ember-400/80">
+              · Hard actif
+            </span>
+          )}
+        </div>
+        <div className="text-white/50">
+          {count} cartes · {pct}%
+        </div>
+      </div>
+      <div className="h-2 rounded-full bg-white/5 overflow-hidden">
+        <div
+          className="h-full rounded-full bg-gradient-to-r from-ember-500 via-velvet-500 to-midnight-500 transition-all"
+          style={{ width: `${pct}%` }}
+        />
+      </div>
+      <button
+        onClick={onReset}
+        className="inline-flex items-center gap-1.5 text-[11px] text-white/50 hover:text-ember-400 transition"
+      >
+        <RotateCcw className="h-3 w-3" /> Réinitialiser la progression
+      </button>
+    </div>
   );
 }
 

@@ -7,6 +7,11 @@ import { useCouple } from "@/lib/couple";
  * soft Bezier curves, heavily blurred, positioned around the viewport and
  * mixed with warm color blobs. Evocative, not explicit — only renders when
  * the couple has explicitly enabled Hard mode.
+ *
+ * Sits at z-0 behind the content wrapper (z-10 in layout) but above the
+ * body's base gradient, so the silhouettes are actually visible.
+ * mix-blend-mode: plus-lighter makes the shapes *add* light to the base
+ * gradient, giving a luminescent quality instead of a flat overlay.
  */
 export function HardBackground() {
   const { config } = useCouple();
@@ -15,30 +20,31 @@ export function HardBackground() {
   return (
     <div
       aria-hidden
-      className="fixed inset-0 -z-10 pointer-events-none overflow-hidden"
+      className="fixed inset-0 z-0 pointer-events-none overflow-hidden"
+      style={{ mixBlendMode: "plus-lighter" }}
     >
       {/* Warm ambient blobs */}
       <div
         className="absolute inset-0"
         style={{
           background: `
-            radial-gradient(ellipse 520px 700px at 12% 22%, rgba(255,120,150,0.24), transparent 62%),
-            radial-gradient(ellipse 460px 620px at 88% 78%, rgba(237,15,35,0.22), transparent 58%),
-            radial-gradient(ellipse 420px 500px at 55% 108%, rgba(180,60,140,0.22), transparent 55%)
+            radial-gradient(ellipse 540px 720px at 12% 22%, rgba(255,120,150,0.42), transparent 62%),
+            radial-gradient(ellipse 480px 640px at 88% 78%, rgba(237,15,60,0.38), transparent 58%),
+            radial-gradient(ellipse 440px 520px at 55% 108%, rgba(210,70,160,0.35), transparent 55%)
           `,
         }}
       />
 
       {/* Silhouette 1 — left, back curve */}
       <svg
-        className="absolute top-[6%] -left-[10%] w-[56vw] max-w-[520px] h-auto opacity-60"
+        className="absolute top-[4%] -left-[12%] w-[62vw] max-w-[600px] h-auto"
         viewBox="0 0 100 200"
-        style={{ filter: "blur(38px)" }}
+        style={{ filter: "blur(36px)", opacity: 0.85 }}
       >
         <defs>
           <linearGradient id="sil1" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0" stopColor="rgba(255,110,140,0.55)" />
-            <stop offset="1" stopColor="rgba(111,59,230,0.35)" />
+            <stop offset="0" stopColor="rgba(255,140,170,0.9)" />
+            <stop offset="1" stopColor="rgba(150,80,230,0.55)" />
           </linearGradient>
         </defs>
         <path
@@ -49,14 +55,14 @@ export function HardBackground() {
 
       {/* Silhouette 2 — right, hip / torso */}
       <svg
-        className="absolute bottom-[8%] -right-[12%] w-[52vw] max-w-[480px] h-auto opacity-55"
+        className="absolute bottom-[4%] -right-[14%] w-[58vw] max-w-[560px] h-auto"
         viewBox="0 0 100 200"
-        style={{ filter: "blur(42px)" }}
+        style={{ filter: "blur(40px)", opacity: 0.8 }}
       >
         <defs>
           <linearGradient id="sil2" x1="1" y1="0" x2="0" y2="1">
-            <stop offset="0" stopColor="rgba(228,51,122,0.55)" />
-            <stop offset="1" stopColor="rgba(111,59,230,0.3)" />
+            <stop offset="0" stopColor="rgba(255,90,140,0.95)" />
+            <stop offset="1" stopColor="rgba(150,80,220,0.45)" />
           </linearGradient>
         </defs>
         <path
@@ -67,13 +73,13 @@ export function HardBackground() {
 
       {/* Silhouette 3 — mid, intertwined curves (suggestion de duo) */}
       <svg
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80vw] max-w-[700px] h-auto opacity-30"
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[85vw] max-w-[780px] h-auto"
         viewBox="0 0 200 200"
-        style={{ filter: "blur(50px)" }}
+        style={{ filter: "blur(50px)", opacity: 0.55 }}
       >
         <defs>
           <radialGradient id="sil3" cx="0.5" cy="0.5" r="0.6">
-            <stop offset="0" stopColor="rgba(255,140,160,0.5)" />
+            <stop offset="0" stopColor="rgba(255,160,180,0.85)" />
             <stop offset="1" stopColor="rgba(20,5,25,0)" />
           </radialGradient>
         </defs>
@@ -87,12 +93,12 @@ export function HardBackground() {
         />
       </svg>
 
-      {/* Top glow for added warmth */}
+      {/* Top warm glow */}
       <div
-        className="absolute inset-x-0 top-0 h-[50vh]"
+        className="absolute inset-x-0 top-0 h-[55vh]"
         style={{
           background:
-            "radial-gradient(ellipse 60% 100% at 50% 0%, rgba(237,15,35,0.18), transparent 70%)",
+            "radial-gradient(ellipse 65% 100% at 50% 0%, rgba(237,15,50,0.3), transparent 70%)",
         }}
       />
     </div>

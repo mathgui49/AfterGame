@@ -15,7 +15,7 @@ export const metadata: Metadata = {
     template: "%s · AfterGame",
   },
   description:
-    "10 modes de jeu, 146+ cartes coquines, scénarios guidés, roulette des gages, bataille coquine, playlists Spotify intégrées, mode lumière tamisée. Pour les couples qui veulent pimenter leurs soirées. 18+.",
+    "10 modes de jeu, 146+ cartes coquines, scénarios guidés, roulette des gages, bataille coquine, mode lumière tamisée, mode hard. Pour les couples qui veulent pimenter leurs soirées. 18+.",
   applicationName: "AfterGame",
   keywords: [
     "AfterGame",
@@ -60,13 +60,13 @@ export const metadata: Metadata = {
     siteName: "AfterGame",
     title: "AfterGame — Rallumez la flamme",
     description:
-      "10 modes de jeu, 146+ cartes, scénarios guidés, playlists Spotify intégrées. Le jeu hot pour couples audacieux. 18+",
+      "10 modes de jeu, 146+ cartes, scénarios guidés, mode hard & lumière tamisée. Le jeu hot pour couples audacieux. 18+",
   },
   twitter: {
     card: "summary_large_image",
     title: "AfterGame — Rallumez la flamme",
     description:
-      "10 modes de jeu, 146+ cartes, scénarios guidés, playlists Spotify intégrées. Pour couples audacieux. 18+",
+      "10 modes de jeu, 146+ cartes, scénarios guidés, mode hard & lumière tamisée. Pour couples audacieux. 18+",
   },
   other: {
     "rating": "adult",
@@ -87,7 +87,7 @@ const jsonLd = {
   "@type": "Game",
   name: "AfterGame",
   description:
-    "Jeu hot pour couples : 10 modes, 146+ cartes, scénarios guidés, playlists Spotify intégrées et mode lumière tamisée.",
+    "Jeu hot pour couples : 10 modes, 146+ cartes, scénarios guidés, mode hard et lumière tamisée.",
   url: BASE_URL,
   image: `${BASE_URL}/opengraph-image`,
   inLanguage: "fr",
@@ -128,9 +128,11 @@ export default function RootLayout({
       <body>
         <DimApplier />
         <HardBackground />
-        <AgeGate />
-        <CoupleSetup />
-        {children}
+        <div className="relative z-10">
+          <AgeGate />
+          <CoupleSetup />
+          {children}
+        </div>
       </body>
     </html>
   );

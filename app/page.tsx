@@ -15,7 +15,6 @@ import {
   PieChart,
   TrendingUp,
   BookOpen,
-  Music2,
 } from "lucide-react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
@@ -56,9 +55,8 @@ export default function Page() {
               </h1>
 
               <p className="mt-6 max-w-2xl text-base sm:text-lg text-white/70 leading-relaxed">
-                10 modes de jeu, scénarios guidés, playlists Spotify, mode
-                lumière tamisée et tes propres cartes maison. Le tout pour
-                vous deux.
+                10 modes de jeu, scénarios guidés, mode lumière tamisée, mode
+                hard et tes propres cartes maison. Le tout pour vous deux.
               </p>
 
               <div className="mt-8 flex flex-col sm:flex-row gap-3">
@@ -225,35 +223,6 @@ export default function Page() {
               />
             </div>
 
-            {/* Ambiance shortcut */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.3 }}
-              transition={{ duration: 0.5 }}
-              className="mt-8"
-            >
-              <Link
-                href="/ambiance"
-                className="group relative flex items-center gap-4 rounded-3xl p-0.5 bg-gradient-to-r from-midnight-600 via-velvet-600 to-ember-500 glow-velvet"
-              >
-                <div className="flex-1 rounded-[calc(1.5rem-2px)] bg-[#0d0513]/85 px-5 sm:px-7 py-5 sm:py-6 flex items-center gap-5">
-                  <Music2 className="h-7 w-7 text-velvet-300 shrink-0" />
-                  <div className="flex-1 min-w-0">
-                    <div className="text-[10px] uppercase tracking-[0.25em] text-white/50">
-                      Playlists Spotify intégrées
-                    </div>
-                    <div className="font-display text-xl sm:text-2xl font-bold mt-0.5">
-                      3 ambiances prêtes à l&apos;emploi
-                    </div>
-                    <div className="text-sm text-white/60 mt-0.5">
-                      Chill romantique · Sensuel · Intense
-                    </div>
-                  </div>
-                  <ArrowRight className="h-5 w-5 text-white/40 group-hover:text-white group-hover:translate-x-1 transition" />
-                </div>
-              </Link>
-            </motion.div>
           </div>
         </section>
 
