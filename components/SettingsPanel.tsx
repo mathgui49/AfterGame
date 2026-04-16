@@ -20,6 +20,7 @@ import { PlayerField } from "./CoupleSetup";
 import { HeatSelector } from "./HeatSelector";
 import { CustomCardsManager } from "./CustomCardsManager";
 import { BodyLimits } from "./BodyLimits";
+import { PracticesManager } from "./PracticesManager";
 
 export function SettingsPanel() {
   const { config, update, clear } = useCouple();
@@ -251,9 +252,14 @@ export function SettingsPanel() {
               </button>
             </section>
 
-            {/* Body limits */}
+            {/* Body limits — ce que j'accepte de recevoir */}
             <section>
               <BodyLimits />
+            </section>
+
+            {/* Practices — ce que j'accepte de faire */}
+            <section>
+              <PracticesManager />
             </section>
 
             {/* Custom cards */}

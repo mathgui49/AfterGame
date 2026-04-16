@@ -68,12 +68,14 @@ export function BodyLimits() {
     <div>
       <div className="flex items-center gap-2 mb-2">
         <Shield className="h-4 w-4 text-emerald-400" />
-        <h3 className="font-display text-xl font-bold">Limites du duo</h3>
+        <h3 className="font-display text-xl font-bold">
+          Ce que j&apos;accepte de recevoir
+        </h3>
       </div>
       <p className="text-xs text-white/55 mb-3 leading-snug">
-        Ces silhouettes représentent <b>ton propre corps</b> — ce que tu
-        acceptes (vert) ou pas (rouge) que ton / ta partenaire te fasse.
-        Chacun·e paramètre le sien indépendamment. Les limites sont sacrées.
+        Ces silhouettes représentent <b>ton propre corps</b>. Zones en vert =
+        ok, en rouge = à ne pas toucher. Chacun·e paramètre le sien. Les
+        limites sont sacrées.
       </p>
 
       {/* Privacy hint */}
