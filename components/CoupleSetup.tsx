@@ -1,17 +1,23 @@
 "use client";
 
 import { useState } from "react";
+import { usePathname } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import { Heart, Sparkles, Users } from "lucide-react";
 import { HEAT_PRESETS, HeatLevel, useCouple } from "@/lib/couple";
 
 export function CoupleSetup() {
   const { config, update, ready, isInitialized } = useCouple();
+  const pathname = usePathname();
   const [p1, setP1] = useState(config.p1);
   const [p2, setP2] = useState(config.p2);
   const [heatKey, setHeatKey] = useState<string>("all");
 
-  if (!ready || isInitialized) return null;
+  // Only gate on game pages — landing & infos pages stay unblocked so new
+  // visitors can discover the app before entering prénoms.
+  const onGameRoute = pathname?.startsWith("/jeux") ?? false;
+
+  if (!ready || isInitialized || !onGameRoute) return null;
 
   const handleSave = () => {
     const p1c = p1.trim();
@@ -166,12 +172,23 @@ export function NameInput({
 export function HeatFlames({ heat }: { heat: HeatLevel[] }) {
   const set = new Set(heat);
   return (
-    <div className="flex items-center gap-0.5 text-sm">
-      {[1, 2, 3].map((l) => (
-        <span key={l} className={set.has(l as HeatLevel) ? "text-ember-400" : "text-white/15"}>
-          🔥
-        </span>
-      ))}
+    <div className="flex items-center gap-0.5 text-sm shrink-0" aria-hidden>
+      {[1, 2, 3].map((l) => {
+        const lit = set.has(l as HeatLevel);
+        return (
+          <span
+            key={l}
+            className="inline-block leading-none"
+            style={{
+              filter: lit
+                ? "none"
+                : "grayscale(1) brightness(0.45) opacity(0.55)",
+            }}
+          >
+            🔥
+          </span>
+        );
+      })}
     </div>
   );
 }

@@ -48,19 +48,24 @@ export function TurnBar({
           <span
             className="hidden sm:inline-flex items-center gap-1 rounded-full border border-white/10 bg-white/5 px-2.5 py-1 text-[11px] text-white/70"
             title={preset.label}
+            aria-hidden
           >
-            {[1, 2, 3].map((l) => (
-              <span
-                key={l}
-                className={
-                  config.heat.includes(l as HeatLevel)
-                    ? "text-ember-400"
-                    : "text-white/20"
-                }
-              >
-                🔥
-              </span>
-            ))}
+            {[1, 2, 3].map((l) => {
+              const lit = config.heat.includes(l as HeatLevel);
+              return (
+                <span
+                  key={l}
+                  className="inline-block leading-none"
+                  style={{
+                    filter: lit
+                      ? "none"
+                      : "grayscale(1) brightness(0.45) opacity(0.55)",
+                  }}
+                >
+                  🔥
+                </span>
+              );
+            })}
           </span>
         )}
         {onSwap && (
