@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { ACTIONS, BODY_PARTS, DURATION, INTENSITY } from "@/data/dice";
+import { useProgressTick } from "@/lib/progressTick";
 import { pick } from "@/lib/utils";
 import { ArrowLeft, Dice5 } from "lucide-react";
 import Link from "next/link";
@@ -17,10 +18,12 @@ type DiceState = {
 };
 
 export default function DicePage() {
+  const tick = useProgressTick();
   const [rolling, setRolling] = useState(false);
   const [state, setState] = useState<DiceState | null>(null);
 
   const roll = () => {
+    tick();
     setRolling(true);
     // Animate multiple reshuffles
     let count = 0;

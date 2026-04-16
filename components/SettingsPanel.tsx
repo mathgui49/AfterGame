@@ -13,6 +13,7 @@ import {
   Flame,
   TrendingUp,
   RotateCcw,
+  Check,
 } from "lucide-react";
 import { HeatLevel, Sex, useCouple } from "@/lib/couple";
 import { progressionState } from "@/lib/progressive";
@@ -26,24 +27,9 @@ export function SettingsPanel() {
   const { config, update, clear } = useCouple();
   const [open, setOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
-  const [p1, setP1] = useState(config.p1);
-  const [p2, setP2] = useState(config.p2);
-  const [p1Sex, setP1Sex] = useState<Sex>(config.p1Sex);
-  const [p2Sex, setP2Sex] = useState<Sex>(config.p2Sex);
-  const [heat, setHeat] = useState<HeatLevel[]>(config.heat);
+  const [savedFlash, setSavedFlash] = useState(false);
 
   useEffect(() => setMounted(true), []);
-
-  // Sync local form with latest global state when opening the panel
-  useEffect(() => {
-    if (open) {
-      setP1(config.p1);
-      setP2(config.p2);
-      setP1Sex(config.p1Sex);
-      setP2Sex(config.p2Sex);
-      setHeat(config.heat);
-    }
-  }, [open, config.p1, config.p2, config.p1Sex, config.p2Sex, config.heat]);
 
   // Lock body scroll when panel is open
   useEffect(() => {
@@ -55,27 +41,40 @@ export function SettingsPanel() {
     };
   }, [open]);
 
-  const save = () => {
-    if (!p1.trim() || !p2.trim()) return;
-    update({ p1: p1.trim(), p2: p2.trim(), p1Sex, p2Sex, heat });
-    setOpen(false);
-  };
+  // Auto-save helpers — mutate shared store directly
+  const setP1 = (v: string) => flashAndUpdate({ p1: v });
+  const setP2 = (v: string) => flashAndUpdate({ p2: v });
+  const setP1Sex = (s: Sex) => flashAndUpdate({ p1Sex: s });
+  const setP2Sex = (s: Sex) => flashAndUpdate({ p2Sex: s });
+  const setHeat = (h: HeatLevel[]) => flashAndUpdate({ heat: h });
 
-  const toggleDim = () => update({ dim: !config.dim });
-  const toggleHard = () => update({ hard: !config.hard });
+  function flashAndUpdate(patch: Parameters<typeof update>[0]) {
+    update(patch);
+    setSavedFlash(true);
+    window.setTimeout(() => setSavedFlash(false), 1200);
+  }
+
+  const toggleDim = () => flashAndUpdate({ dim: !config.dim });
+  const toggleHard = () => flashAndUpdate({ hard: !config.hard });
   const toggleProgressive = () => {
     if (config.progressive) {
-      update({ progressive: false });
+      flashAndUpdate({ progressive: false });
     } else {
-      // Starting progressive: reset the counter and make sure heat covers all
-      // levels so the ramp can fully play out.
-      update({ progressive: true, progressCount: 0, heat: [1, 2, 3] });
+      flashAndUpdate({
+        progressive: true,
+        progressCount: 0,
+        heat: [1, 2, 3],
+      });
     }
   };
-  const resetProgress = () => update({ progressCount: 0 });
+  const resetProgress = () => flashAndUpdate({ progressCount: 0 });
 
   const reset = () => {
-    if (confirm("Réinitialiser prénoms, chaleur, mode hard et cartes perso ?")) {
+    if (
+      confirm(
+        "Réinitialiser tous les paramètres (prénoms, chaleur, limites, pratiques, cartes perso, etc.) ?"
+      )
+    ) {
       clear();
       setOpen(false);
     }
@@ -109,6 +108,20 @@ export function SettingsPanel() {
               <span className="text-xs font-semibold uppercase tracking-[0.2em]">
                 Paramètres
               </span>
+              <AnimatePresence>
+                {savedFlash && (
+                  <motion.span
+                    key="saved"
+                    initial={{ opacity: 0, y: -4 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0 }}
+                    className="ml-2 inline-flex items-center gap-1 text-[10px] uppercase tracking-widest text-emerald-400"
+                  >
+                    <Check className="h-3 w-3" />
+                    Enregistré
+                  </motion.span>
+                )}
+              </AnimatePresence>
             </div>
             <button
               aria-label="Fermer"
@@ -130,17 +143,17 @@ export function SettingsPanel() {
                 <PlayerField
                   label="Joueur 1"
                   color="from-ember-500 to-velvet-600"
-                  name={p1}
+                  name={config.p1}
                   onName={setP1}
-                  sex={p1Sex}
+                  sex={config.p1Sex}
                   onSex={setP1Sex}
                 />
                 <PlayerField
                   label="Joueur 2"
                   color="from-velvet-500 to-midnight-600"
-                  name={p2}
+                  name={config.p2}
                   onName={setP2}
-                  sex={p2Sex}
+                  sex={config.p2Sex}
                   onSex={setP2Sex}
                 />
               </div>
@@ -189,12 +202,12 @@ export function SettingsPanel() {
                   <Sparkles className="h-4 w-4 text-velvet-300" />
                   <h3 className="font-display text-xl font-bold">Chaleur</h3>
                 </div>
-                <HeatSelector heat={heat} onChange={setHeat} />
+                <HeatSelector heat={config.heat} onChange={setHeat} />
               </section>
             )}
 
-            {/* Hard — masqué en mode progressif (auto-géré), sinon gated par niveau 3 */}
-            {!config.progressive && heat.includes(3) && (
+            {/* Hard — masqué en mode progressif, sinon gated par niveau 3 */}
+            {!config.progressive && config.heat.includes(3) && (
               <section>
                 <div className="flex items-center gap-2 mb-3">
                   <Flame className="h-4 w-4 text-ember-500" />
@@ -267,19 +280,12 @@ export function SettingsPanel() {
               <CustomCardsManager />
             </section>
 
-            <div className="pt-4 border-t border-white/5 flex flex-col gap-3">
-              <button
-                onClick={save}
-                disabled={!p1.trim() || !p2.trim()}
-                className="btn-hot w-full rounded-full py-3 font-semibold disabled:opacity-50"
-              >
-                Enregistrer prénoms & chaleur
-              </button>
+            <div className="pt-4 border-t border-white/5">
               <button
                 onClick={reset}
                 className="inline-flex items-center justify-center gap-2 text-sm text-white/50 hover:text-ember-400 transition"
               >
-                <Trash2 className="h-4 w-4" /> Réinitialiser les paramètres
+                <Trash2 className="h-4 w-4" /> Réinitialiser tous les paramètres
               </button>
             </div>
           </div>

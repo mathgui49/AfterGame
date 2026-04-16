@@ -7,6 +7,7 @@ import { Footer } from "@/components/Footer";
 import { TurnBar } from "@/components/TurnBar";
 import { TDItem, TDLevel, TRUTHS, DARES } from "@/data/truthOrDare";
 import { HeatLevel, pickLevel, useCouple } from "@/lib/couple";
+import { useProgressTick } from "@/lib/progressTick";
 import { pick } from "@/lib/utils";
 import { ArrowLeft, Flame, HelpCircle, Sparkles } from "lucide-react";
 import Link from "next/link";
@@ -17,6 +18,7 @@ function heatToTD(l: HeatLevel): TDLevel {
 
 export default function TruthOrDarePage() {
   const { config } = useCouple();
+  const tick = useProgressTick();
   const [choice, setChoice] = useState<"truth" | "dare" | null>(null);
   const [item, setItem] = useState<TDItem | null>(null);
   const [turn, setTurn] = useState<0 | 1>(0);
@@ -31,6 +33,7 @@ export default function TruthOrDarePage() {
   }, [config.heat]);
 
   const draw = (c: "truth" | "dare") => {
+    tick();
     setChoice(c);
     // Pick a heat level from couple's config then filter pool to that level
     const lvl = heatToTD(pickLevel(config));

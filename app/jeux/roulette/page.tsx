@@ -8,11 +8,13 @@ import { ArrowLeft, PieChart } from "lucide-react";
 import Link from "next/link";
 import { SECTORS, rollSector } from "@/data/roulette";
 import { useCouple } from "@/lib/couple";
+import { useProgressTick } from "@/lib/progressTick";
 
 const SEG = 360 / SECTORS.length; // 45 deg
 
 export default function RoulettePage() {
   const { config } = useCouple();
+  const tick = useProgressTick();
   const [rotation, setRotation] = useState(0);
   const [spinning, setSpinning] = useState(false);
   const [result, setResult] = useState<{
@@ -31,6 +33,7 @@ export default function RoulettePage() {
 
   const spin = () => {
     if (spinning) return;
+    tick();
     setSpinning(true);
     setResult(null);
     // Pick only among allowed sectors given the heat config

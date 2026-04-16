@@ -14,6 +14,7 @@ import {
 } from "@/data/battle";
 import { shuffle } from "@/lib/utils";
 import { useCouple } from "@/lib/couple";
+import { useProgressTick } from "@/lib/progressTick";
 
 type Round = {
   p1: BattleCard;
@@ -23,6 +24,7 @@ type Round = {
 
 export default function BattlePage() {
   const { config } = useCouple();
+  const tick = useProgressTick();
   const [deckSeed, setDeckSeed] = useState(0);
   const [scoreA, setScoreA] = useState(0);
   const [scoreB, setScoreB] = useState(0);
@@ -41,6 +43,7 @@ export default function BattlePage() {
   const nameB = config.p2 || "Joueur B";
 
   const drawRound = () => {
+    tick();
     // Hide the current cards first, then reveal the new ones after a
     // short delay so the flip animation is visible.
     setRevealed(false);

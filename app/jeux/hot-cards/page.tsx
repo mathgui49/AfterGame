@@ -16,6 +16,7 @@ import { HARD_CARDS } from "@/data/hardCards";
 import { useCouple } from "@/lib/couple";
 import { useCustomCards } from "@/lib/customCards";
 import { pickProgressiveLevel, shouldUseHard } from "@/lib/progressive";
+import { useProgressTick } from "@/lib/progressTick";
 import { renderCard } from "@/lib/templater";
 import { pick, shuffle } from "@/lib/utils";
 import { ArrowLeft, Flame, RefreshCw, SlidersHorizontal, Shuffle } from "lucide-react";
@@ -35,6 +36,7 @@ const ALL_CATEGORIES: Category[] = [
 export default function HotCardsPage() {
   const { config, update } = useCouple();
   const { cards: customCards } = useCustomCards();
+  const tick = useProgressTick();
   const [categories, setCategories] = useState<Category[]>([...ALL_CATEGORIES]);
   const [flipped, setFlipped] = useState(false);
   const [index, setIndex] = useState(0);
@@ -77,9 +79,9 @@ export default function HotCardsPage() {
     setFlipped(false);
     setTurn((t) => (t === 0 ? 1 : 0));
     setTimeout(() => {
+      tick();
       if (config.progressive) {
         const nextCount = (config.progressCount ?? 0) + 1;
-        update({ progressCount: nextCount });
         setProgressiveCard(
           drawProgressiveCard(nextCount, categories, customCards)
         );

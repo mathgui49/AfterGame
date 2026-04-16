@@ -3,10 +3,13 @@
 import Link from "next/link";
 import { Logo } from "./Logo";
 import { SettingsPanel } from "./SettingsPanel";
+import { ProgressBanner } from "./ProgressBanner";
 
 export function Header() {
   return (
-    <header className="sticky top-0 z-40 border-b border-white/5 backdrop-blur-xl bg-[#0d0513]/60">
+    <>
+      <ProgressBanner />
+    <header className="sticky top-0 z-30 border-b border-white/5 backdrop-blur-xl bg-[#0d0513]/60">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 gap-3">
         <Link href="/">
           <Logo />
@@ -33,5 +36,6 @@ export function Header() {
         </div>
       </div>
     </header>
+    </>
   );
 }

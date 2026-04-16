@@ -8,27 +8,27 @@ export interface Player {
 /**
  * Render a card template substituting gender-aware tokens.
  *
- * Tokens:
- *   {you} / {partner}            → bolded name
- *   {P1} / {P2}                  → explicit legacy names (bolded)
- *   {you:xxx} / {partner:xxx}    → token resolved from that player's sex
- *   {P1:xxx} / {P2:xxx}          → same
+ * Tokens kept minimal and context-safe. The possessives "son/sa", "mon/ma",
+ * etc. are intentionally NOT provided because they agree with the FOLLOWING
+ * noun's grammatical gender, not with the person's sex. Anatomical nouns
+ * (pénis, clitoris, sexe) are all masculine in French, so card authors
+ * should just write "son {partner:sexe}" literally.
  *
- * Available token kinds:
+ * Name tokens:
+ *   {you} / {partner} / {P1} / {P2}   → bolded name
+ *
+ * Gender-aware tokens (apply to {you|partner|P1|P2}:kind):
  *   sexe     → "pénis" / "clitoris"
- *   vulve    → "pénis" / "vulve"
  *   oral     → "fellation" / "cunnilingus"
- *   oralv    → "une fellation" / "un cunnilingus" (with article)
+ *   oralv    → "une fellation" / "un cunnilingus"   (with article)
  *   le       → "le" / "la"
  *   il       → "il" / "elle"
- *   adj / e  → "" / "e"              (accord masculin/féminin)
- *   cum      → "éjaculer" / "mouiller"
- *   cume     → "éjaculé" / "mouillée" (past participle)
- *   touche   → "branler" / "doigter"
- *   suc      → "sucer" / "lécher"
- *   mon      → "mon" / "ma"
- *   son      → "son" / "sa"
- *   un       → "un" / "une"
+ *   lui      → "lui" (same for all)
+ *   e / adj  → "" / "e"                               (accord)
+ *   cum      → "éjaculer" / "mouiller"               (infinitif)
+ *   cume     → "éjaculé" / "mouillée"                (past participle)
+ *   touche   → "branler" / "doigter"                 (infinitif)
+ *   suc      → "sucer" / "lécher"                    (infinitif)
  */
 export function renderCard(
   template: string,
@@ -64,8 +64,6 @@ function token(p: Player, kind: string): string {
   switch (kind) {
     case "sexe":
       return isM ? "pénis" : "clitoris";
-    case "vulve":
-      return isM ? "pénis" : "vulve";
     case "oral":
       return isM ? "fellation" : "cunnilingus";
     case "oralv":
@@ -87,12 +85,6 @@ function token(p: Player, kind: string): string {
       return isM ? "branler" : "doigter";
     case "suc":
       return isM ? "sucer" : "lécher";
-    case "mon":
-      return isM ? "mon" : "ma";
-    case "son":
-      return isM ? "son" : "sa";
-    case "un":
-      return isM ? "un" : "une";
     default:
       return "";
   }

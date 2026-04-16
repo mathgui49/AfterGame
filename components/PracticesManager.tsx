@@ -30,11 +30,24 @@ export function PracticesManager() {
     else update({ p2Refuses: [] });
   };
 
-  const grouped = Object.entries(GROUP_LABELS).map(([key, label]) => ({
-    key: key as Practice["group"],
-    label,
-    items: PRACTICES.filter((p) => p.group === key),
-  }));
+  // Filter by gender compatibility: the "subject" is the active tab's
+  // player (who's doing the practice), the "partner" is the other one.
+  const subjectSex = active === "p1" ? config.p1Sex : config.p2Sex;
+  const partnerSex = active === "p1" ? config.p2Sex : config.p1Sex;
+
+  const applicable = PRACTICES.filter((p) => {
+    if (p.requires?.subject && p.requires.subject !== subjectSex) return false;
+    if (p.requires?.partner && p.requires.partner !== partnerSex) return false;
+    return true;
+  });
+
+  const grouped = Object.entries(GROUP_LABELS)
+    .map(([key, label]) => ({
+      key: key as Practice["group"],
+      label,
+      items: applicable.filter((p) => p.group === key),
+    }))
+    .filter((g) => g.items.length > 0);
 
   return (
     <div>

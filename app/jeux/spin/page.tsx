@@ -5,11 +5,13 @@ import { motion } from "framer-motion";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { SPIN_CHALLENGES } from "@/data/spin";
+import { useProgressTick } from "@/lib/progressTick";
 import { pick } from "@/lib/utils";
 import { ArrowLeft, Disc3 } from "lucide-react";
 import Link from "next/link";
 
 export default function SpinPage() {
+  const tick = useProgressTick();
   const [rotation, setRotation] = useState(0);
   const [spinning, setSpinning] = useState(false);
   const [challenge, setChallenge] = useState<string | null>(null);
@@ -17,6 +19,7 @@ export default function SpinPage() {
 
   const spin = () => {
     if (spinning) return;
+    tick();
     setChallenge(null);
     setSpinning(true);
     const extra = 1800 + Math.random() * 1440; // 5-9 turns
