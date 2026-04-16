@@ -1,7 +1,7 @@
 "use client";
 
 import { ArrowLeftRight } from "lucide-react";
-import { useCouple, HEAT_PRESETS, HeatLevel } from "@/lib/couple";
+import { useCouple, HeatLevel } from "@/lib/couple";
 
 export function TurnBar({
   turn,
@@ -16,12 +16,8 @@ export function TurnBar({
   const names = [config.p1 || "Toi", config.p2 || "Partenaire"];
   const current = names[turn];
 
-  const preset =
-    HEAT_PRESETS.find(
-      (p) =>
-        p.heat.length === config.heat.length &&
-        p.heat.every((l) => config.heat.includes(l as HeatLevel))
-    ) ?? HEAT_PRESETS[0];
+  const heatMode =
+    config.heat.length === 1 ? "Uniquement" : "Aléatoire";
 
   return (
     <div className="flex items-center justify-between gap-3 rounded-2xl glass px-4 py-3">
@@ -47,7 +43,7 @@ export function TurnBar({
         {showHeat && (
           <span
             className="hidden sm:inline-flex items-center gap-1 rounded-full border border-white/10 bg-white/5 px-2.5 py-1 text-[11px] text-white/70"
-            title={preset.label}
+            title={heatMode}
             aria-hidden
           >
             {[1, 2, 3].map((l) => {

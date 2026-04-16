@@ -3,6 +3,7 @@ import "./globals.css";
 import { AgeGate } from "@/components/AgeGate";
 import { CoupleSetup } from "@/components/CoupleSetup";
 import { DimApplier } from "@/components/DimApplier";
+import { HardBackground } from "@/components/HardBackground";
 import { siteUrl } from "@/lib/site";
 
 const BASE_URL = siteUrl();
@@ -126,6 +127,7 @@ export default function RootLayout({
       </head>
       <body>
         <DimApplier />
+        <HardBackground />
         <AgeGate />
         <CoupleSetup />
         {children}

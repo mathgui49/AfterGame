@@ -3,13 +3,18 @@
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { AnimatePresence, motion } from "framer-motion";
-import { Settings, X, Heart, Sparkles, Trash2, Moon } from "lucide-react";
 import {
-  HEAT_PRESETS,
-  HeatLevel,
-  useCouple,
-} from "@/lib/couple";
-import { HeatFlames, NameInput } from "./CoupleSetup";
+  Settings,
+  X,
+  Heart,
+  Sparkles,
+  Trash2,
+  Moon,
+  Flame,
+} from "lucide-react";
+import { HeatLevel, useCouple } from "@/lib/couple";
+import { NameInput } from "./CoupleSetup";
+import { HeatSelector } from "./HeatSelector";
 import { CustomCardsManager } from "./CustomCardsManager";
 import { PlaylistsCustomizer } from "./PlaylistsCustomizer";
 
@@ -23,13 +28,14 @@ export function SettingsPanel() {
 
   useEffect(() => setMounted(true), []);
 
+  // Sync local form with latest global state when opening the panel
   useEffect(() => {
     if (open) {
       setP1(config.p1);
       setP2(config.p2);
       setHeat(config.heat);
     }
-  }, [open, config]);
+  }, [open, config.p1, config.p2, config.heat]);
 
   // Lock body scroll when panel is open
   useEffect(() => {
@@ -41,13 +47,6 @@ export function SettingsPanel() {
     };
   }, [open]);
 
-  const currentKey =
-    HEAT_PRESETS.find(
-      (p) =>
-        p.heat.length === heat.length &&
-        p.heat.every((l) => heat.includes(l))
-    )?.key ?? "custom";
-
   const save = () => {
     if (!p1.trim() || !p2.trim()) return;
     update({ p1: p1.trim(), p2: p2.trim(), heat });
@@ -55,9 +54,10 @@ export function SettingsPanel() {
   };
 
   const toggleDim = () => update({ dim: !config.dim });
+  const toggleHard = () => update({ hard: !config.hard });
 
   const reset = () => {
-    if (confirm("Réinitialiser prénoms et niveau de chaleur ?")) {
+    if (confirm("Réinitialiser prénoms, chaleur, mode hard et cartes perso ?")) {
       clear();
       setOpen(false);
     }
@@ -130,27 +130,40 @@ export function SettingsPanel() {
                 <Sparkles className="h-4 w-4 text-velvet-300" />
                 <h3 className="font-display text-xl font-bold">Chaleur</h3>
               </div>
-              <div className="grid grid-cols-1 gap-2">
-                {HEAT_PRESETS.map((p) => (
-                  <button
-                    key={p.key}
-                    onClick={() => setHeat(p.heat)}
-                    className={`text-left rounded-2xl px-4 py-3 border transition flex items-center gap-3 ${
-                      currentKey === p.key
-                        ? "border-ember-500 bg-ember-500/10"
-                        : "border-white/10 hover:bg-white/5"
-                    }`}
-                  >
-                    <HeatFlames heat={p.heat} />
-                    <div className="flex-1 min-w-0">
-                      <div className="font-semibold text-sm">{p.label}</div>
-                      <div className="text-xs text-white/55 truncate">
-                        {p.desc}
-                      </div>
-                    </div>
-                  </button>
-                ))}
+              <HeatSelector heat={heat} onChange={setHeat} />
+            </section>
+
+            {/* Hard */}
+            <section>
+              <div className="flex items-center gap-2 mb-3">
+                <Flame className="h-4 w-4 text-ember-500" />
+                <h3 className="font-display text-xl font-bold">Mode Hard</h3>
               </div>
+              <button
+                onClick={toggleHard}
+                className={`w-full text-left rounded-2xl px-4 py-3 border transition flex items-center gap-3 ${
+                  config.hard
+                    ? "border-ember-500 bg-ember-500/15"
+                    : "border-white/10 hover:bg-white/5"
+                }`}
+              >
+                <div className="flex-1 min-w-0">
+                  <div className="font-semibold text-sm">
+                    Contenu explicite & cru
+                  </div>
+                  <div className="text-xs text-white/55 leading-snug">
+                    Active un pool de défis et vérités très directs, avec des
+                    mots crus. Arrière-plan sensuel activé.
+                  </div>
+                </div>
+                <Toggle active={config.hard} />
+              </button>
+              {config.hard && (
+                <p className="mt-2 text-[11px] text-ember-400/80 leading-snug">
+                  ⚠️ Rappel : toujours avec consentement mutuel. Un simple
+                  &laquo; pas ce soir &raquo; suffit à passer une carte.
+                </p>
+              )}
             </section>
 
             {/* Ambience */}
@@ -173,17 +186,7 @@ export function SettingsPanel() {
                     Assombrit l&apos;interface quand vous baissez les lumières.
                   </div>
                 </div>
-                <div
-                  className={`h-6 w-11 rounded-full transition relative ${
-                    config.dim ? "bg-ember-500" : "bg-white/15"
-                  }`}
-                >
-                  <div
-                    className={`absolute top-0.5 h-5 w-5 rounded-full bg-white transition-transform ${
-                      config.dim ? "translate-x-5" : "translate-x-0.5"
-                    }`}
-                  />
-                </div>
+                <Toggle active={config.dim} />
               </button>
             </section>
 
@@ -229,5 +232,21 @@ export function SettingsPanel() {
       </button>
       {mounted ? createPortal(overlay, document.body) : null}
     </>
+  );
+}
+
+function Toggle({ active }: { active: boolean }) {
+  return (
+    <div
+      className={`h-6 w-11 rounded-full transition relative shrink-0 ${
+        active ? "bg-ember-500" : "bg-white/15"
+      }`}
+    >
+      <div
+        className={`absolute top-0.5 h-5 w-5 rounded-full bg-white transition-transform ${
+          active ? "translate-x-5" : "translate-x-0.5"
+        }`}
+      />
+    </div>
   );
 }

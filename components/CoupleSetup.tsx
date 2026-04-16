@@ -4,30 +4,28 @@ import { useState } from "react";
 import { usePathname } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import { Heart, Sparkles, Users } from "lucide-react";
-import { HEAT_PRESETS, HeatLevel, useCouple } from "@/lib/couple";
+import { HeatLevel, useCouple } from "@/lib/couple";
+import { HeatSelector } from "./HeatSelector";
 
 export function CoupleSetup() {
   const { config, update, ready, isInitialized } = useCouple();
   const pathname = usePathname();
   const [p1, setP1] = useState(config.p1);
   const [p2, setP2] = useState(config.p2);
-  const [heatKey, setHeatKey] = useState<string>("all");
+  const [heat, setHeat] = useState<HeatLevel[]>(config.heat);
 
-  // Only gate on game pages — landing & infos pages stay unblocked so new
+  // Only gate on game pages — landing & info pages stay unblocked so new
   // visitors can discover the app before entering prénoms.
   const onGameRoute = pathname?.startsWith("/jeux") ?? false;
 
   if (!ready || isInitialized || !onGameRoute) return null;
 
-  const handleSave = () => {
-    const p1c = p1.trim();
-    const p2c = p2.trim();
-    if (!p1c || !p2c) return;
-    const preset = HEAT_PRESETS.find((h) => h.key === heatKey) ?? HEAT_PRESETS[0];
-    update({ p1: p1c, p2: p2c, heat: preset.heat });
-  };
-
   const canSave = p1.trim().length > 0 && p2.trim().length > 0;
+
+  const handleSave = () => {
+    if (!canSave) return;
+    update({ p1: p1.trim(), p2: p2.trim(), heat });
+  };
 
   return (
     <AnimatePresence>
@@ -85,33 +83,13 @@ export function CoupleSetup() {
 
             {/* Heat */}
             <div className="mt-6">
-              <div className="flex items-center gap-2 text-velvet-300">
-                <Sparkles className="h-4 w-4" />
-                <span className="text-xs font-semibold uppercase tracking-[0.2em]">
+              <div className="flex items-center gap-2 mb-3">
+                <Sparkles className="h-4 w-4 text-velvet-300" />
+                <span className="text-xs font-semibold uppercase tracking-[0.2em] text-velvet-300">
                   Niveau de chaleur
                 </span>
               </div>
-              <div className="mt-3 grid grid-cols-1 gap-2 max-h-[240px] overflow-y-auto pr-1">
-                {HEAT_PRESETS.map((p) => (
-                  <button
-                    key={p.key}
-                    onClick={() => setHeatKey(p.key)}
-                    className={`text-left rounded-2xl px-4 py-3 border transition flex items-center gap-3 ${
-                      heatKey === p.key
-                        ? "border-ember-500 bg-ember-500/10"
-                        : "border-white/10 hover:bg-white/5"
-                    }`}
-                  >
-                    <HeatFlames heat={p.heat} />
-                    <div className="flex-1 min-w-0">
-                      <div className="font-semibold text-sm">{p.label}</div>
-                      <div className="text-xs text-white/55 truncate">
-                        {p.desc}
-                      </div>
-                    </div>
-                  </button>
-                ))}
-              </div>
+              <HeatSelector heat={heat} onChange={setHeat} />
             </div>
 
             <button
@@ -169,6 +147,7 @@ export function NameInput({
   );
 }
 
+/** Legacy export kept for retro-compat (used by older code paths). */
 export function HeatFlames({ heat }: { heat: HeatLevel[] }) {
   const set = new Set(heat);
   return (

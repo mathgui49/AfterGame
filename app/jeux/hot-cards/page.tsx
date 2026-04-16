@@ -12,6 +12,7 @@ import {
   HOT_CARDS,
   HotCard,
 } from "@/data/hotCards";
+import { HARD_CARDS } from "@/data/hardCards";
 import { useCouple } from "@/lib/couple";
 import { useCustomCards } from "@/lib/customCards";
 import { shuffle } from "@/lib/utils";
@@ -40,7 +41,11 @@ export default function HotCardsPage() {
   const [turn, setTurn] = useState<0 | 1>(0);
 
   const deck: HotCard[] = useMemo(() => {
-    const all: HotCard[] = [...HOT_CARDS, ...customCards];
+    const all: HotCard[] = [
+      ...HOT_CARDS,
+      ...customCards,
+      ...(config.hard ? HARD_CARDS : []),
+    ];
     const filtered = all.filter(
       (c) =>
         (!config.heat.length || config.heat.includes(c.level)) &&
@@ -48,7 +53,7 @@ export default function HotCardsPage() {
     );
     return shuffle(filtered);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [categories, seed, config.heat, customCards]);
+  }, [categories, seed, config.heat, config.hard, customCards]);
 
   useEffect(() => {
     setIndex(0);
