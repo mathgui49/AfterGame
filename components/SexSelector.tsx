@@ -5,7 +5,6 @@ import type { Sex } from "@/lib/couple";
 const OPTIONS: { value: Sex; label: string; symbol: string }[] = [
   { value: "F", label: "Femme", symbol: "♀" },
   { value: "M", label: "Homme", symbol: "♂" },
-  { value: "X", label: "Autre", symbol: "⚧" },
 ];
 
 export function SexSelector({
@@ -24,7 +23,7 @@ export function SexSelector({
             key={o.value}
             type="button"
             onClick={() => onChange(o.value)}
-            className={`inline-flex items-center gap-1 rounded-full px-2.5 py-1 transition ${
+            className={`inline-flex items-center gap-1 rounded-full px-3 py-1 transition ${
               active
                 ? "bg-gradient-to-r from-ember-500 to-velvet-600 text-white font-semibold"
                 : "text-white/55 hover:text-white"

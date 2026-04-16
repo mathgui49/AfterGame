@@ -55,8 +55,10 @@ export default function Page() {
               </h1>
 
               <p className="mt-6 max-w-2xl text-base sm:text-lg text-white/70 leading-relaxed">
-                10 modes de jeu, scénarios guidés, mode lumière tamisée, mode
-                hard et tes propres cartes maison. Le tout pour vous deux.
+                10 modes de jeu entièrement personnalisables. Vos prénoms dans
+                les défis, cartes conjuguées selon votre sexe, silhouettes de
+                consentement, mode progressif et mode Hard — tout pour votre
+                duo, dans vos règles.
               </p>
 
               <div className="mt-8 flex flex-col sm:flex-row gap-3">
@@ -250,18 +252,18 @@ export default function Page() {
                   {[
                     {
                       n: "01",
-                      t: "Choisis un jeu",
-                      d: "Cartes, défis, dés, quiz… Choisis l'ambiance qui vous correspond ce soir.",
+                      t: "Votre duo",
+                      d: "Prénoms + sexe. Les défis se conjuguent automatiquement, rien de décalé.",
                     },
                     {
                       n: "02",
-                      t: "Ajuste la chaleur",
-                      d: "Trois niveaux de flammes : 🔥 warm-up, 🔥🔥 chaud, 🔥🔥🔥 explosif.",
+                      t: "Vos envies",
+                      d: "Silhouettes verte/rouge privées, cartes perso, mode progressif ou chaleur fixée.",
                     },
                     {
                       n: "03",
-                      t: "Jouez le jeu",
-                      d: "Tirez à tour de rôle, respectez toujours les limites de l'autre, amusez-vous.",
+                      t: "Votre nuit",
+                      d: "Tirez à tour de rôle, passez ce qui ne vous parle pas, amusez-vous.",
                     },
                   ].map((s) => (
                     <div key={s.n} className="glass rounded-2xl p-5">

@@ -6,7 +6,7 @@ const STORAGE_KEY = "aftergame:couple_v2";
 
 export type HeatLevel = 1 | 2 | 3;
 
-export type Sex = "M" | "F" | "X"; // Homme / Femme / Non-précisé
+export type Sex = "M" | "F"; // Homme / Femme
 
 export interface CoupleConfig {
   p1: string;
@@ -25,8 +25,8 @@ export interface CoupleConfig {
 const DEFAULT_CONFIG: CoupleConfig = {
   p1: "",
   p2: "",
-  p1Sex: "X",
-  p2Sex: "X",
+  p1Sex: "F",
+  p2Sex: "M",
   heat: [1, 2, 3],
   dim: false,
   hard: false,

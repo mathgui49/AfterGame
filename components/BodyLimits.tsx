@@ -69,17 +69,11 @@ export function BodyLimits() {
       <div className="flex items-center gap-2 mb-2">
         <Shield className="h-4 w-4 text-emerald-400" />
         <h3 className="font-display text-xl font-bold">Limites du duo</h3>
-        {limits.size > 0 && (
-          <span className="ml-auto text-[11px] text-ember-400">
-            {limits.size} zone{limits.size > 1 ? "s" : ""} off
-          </span>
-        )}
       </div>
       <p className="text-xs text-white/55 mb-3 leading-snug">
-        Chacun·e paramètre <b>son propre corps</b>. Tape un point pour passer
-        du <b className="text-emerald-400">vert</b> (ok) au{" "}
-        <b className="text-ember-400">rouge</b> (à éviter). Les limites sont
-        sacrées — toujours.
+        Ces silhouettes représentent <b>ton propre corps</b> — ce que tu
+        acceptes (vert) ou pas (rouge) que ton / ta partenaire te fasse.
+        Chacun·e paramètre le sien indépendamment. Les limites sont sacrées.
       </p>
 
       {/* Privacy hint */}
@@ -87,31 +81,30 @@ export function BodyLimits() {
         <EyeOff className="h-3.5 w-3.5 mt-0.5 shrink-0 text-velvet-300" />
         <span>
           Tu peux remplir ton corps sans montrer l&apos;écran à
-          l&apos;autre — iel découvrira tes envies au fur et à mesure des
-          cartes.
+          l&apos;autre — iel découvrira tes envies et tes refus au fur et à
+          mesure des cartes.
           <button
             onClick={() => setPrivacy((p) => !p)}
             className="ml-2 underline text-velvet-300 hover:text-white transition"
           >
-            {privacy ? "Tout afficher" : "Masquer l'autre corps"}
+            {privacy ? "Tout afficher" : "Flouter"}
           </button>
         </span>
       </div>
 
-      {/* Player tabs */}
+      {/* Player tabs (no count badges — partner must not be able to guess
+          whether the other set red zones). */}
       <div className="mb-3 inline-flex w-full rounded-full border border-white/10 bg-white/5 p-0.5 text-xs">
         <TabButton
           active={active === "p1"}
           onClick={() => setActive("p1")}
           label={nameP1}
-          count={config.p1Limits.length}
           gradient="from-ember-500 to-velvet-600"
         />
         <TabButton
           active={active === "p2"}
           onClick={() => setActive("p2")}
           label={nameP2}
-          count={config.p2Limits.length}
           gradient="from-velvet-500 to-midnight-600"
         />
       </div>
@@ -133,32 +126,35 @@ export function BodyLimits() {
         />
       </div>
 
-      {/* Legend */}
-      <div className="mt-3 flex flex-wrap gap-2 text-[11px]">
-        {ZONES.map((z) => {
-          const forbidden = limits.has(z.id);
-          return (
-            <button
-              key={z.id}
-              onClick={() => toggle(z.id)}
-              className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 border transition ${
-                forbidden
-                  ? "border-ember-500/60 bg-ember-500/15 text-ember-300"
-                  : "border-emerald-500/40 bg-emerald-500/10 text-emerald-300/90 hover:bg-emerald-500/20"
-              }`}
-            >
-              <span
-                className={`h-2 w-2 rounded-full ${
-                  forbidden ? "bg-ember-500" : "bg-emerald-400"
+      {/* Legend — hidden when privacy mode is on so the partner can't peek
+          at the red labels either. */}
+      {!privacy && (
+        <div className="mt-3 flex flex-wrap gap-2 text-[11px]">
+          {ZONES.map((z) => {
+            const forbidden = limits.has(z.id);
+            return (
+              <button
+                key={z.id}
+                onClick={() => toggle(z.id)}
+                className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 border transition ${
+                  forbidden
+                    ? "border-ember-500/60 bg-ember-500/15 text-ember-300"
+                    : "border-emerald-500/40 bg-emerald-500/10 text-emerald-300/90 hover:bg-emerald-500/20"
                 }`}
-              />
-              {z.label}
-            </button>
-          );
-        })}
-      </div>
+              >
+                <span
+                  className={`h-2 w-2 rounded-full ${
+                    forbidden ? "bg-ember-500" : "bg-emerald-400"
+                  }`}
+                />
+                {z.label}
+              </button>
+            );
+          })}
+        </div>
+      )}
 
-      {limits.size > 0 && (
+      {!privacy && limits.size > 0 && (
         <button
           onClick={resetAll}
           className="mt-3 inline-flex items-center gap-1.5 text-[11px] text-white/50 hover:text-emerald-400 transition"
@@ -175,13 +171,11 @@ function TabButton({
   active,
   onClick,
   label,
-  count,
   gradient,
 }: {
   active: boolean;
   onClick: () => void;
   label: string;
-  count: number;
   gradient: string;
 }) {
   return (
@@ -194,11 +188,6 @@ function TabButton({
       }`}
     >
       <span className="truncate">{label}</span>
-      {count > 0 && (
-        <span className="inline-flex items-center justify-center text-[10px] font-bold rounded-full bg-white/25 text-white px-1.5 py-0.5 min-w-[16px]">
-          {count}
-        </span>
-      )}
     </button>
   );
 }

@@ -8,25 +8,27 @@ export interface Player {
 /**
  * Render a card template substituting gender-aware tokens.
  *
- * Supported placeholders (wrap the token in curly braces):
- *   {you}                 → current player's name (bolded)
- *   {partner}             → other player's name (bolded)
- *   {P1} / {P2}           → explicit p1 / p2 name (bolded) — legacy
- *   {you:xxx} / {partner:xxx}  → gender-aware token based on that player's sex
+ * Tokens:
+ *   {you} / {partner}            → bolded name
+ *   {P1} / {P2}                  → explicit legacy names (bolded)
+ *   {you:xxx} / {partner:xxx}    → token resolved from that player's sex
+ *   {P1:xxx} / {P2:xxx}          → same
  *
- * Available token kinds (apply to "you" or "partner"):
- *   sexe   → "pénis" / "clitoris" / "sexe"
- *   vulve  → "pénis" / "vulve" / "sexe"
- *   oral   → "fellation" / "cunnilingus" / "oral"
- *   le     → "le" / "la" / "le·a"
- *   lui    → "lui" (same for all)
- *   il     → "il" / "elle" / "iel"
- *   adj    → "" / "e" / "·e"          (adjective / past participle ending)
- *   cum    → "éjaculer" / "mouiller" / "jouir"
- *   touche → "branler" / "doigter" / "caresser"
- *   suc    → "sucer" / "lécher" / "goûter"
- *   mon    → "mon" / "ma" / "mon·a"
- *   son    → "son" / "sa" / "son·a"
+ * Available token kinds:
+ *   sexe     → "pénis" / "clitoris"
+ *   vulve    → "pénis" / "vulve"
+ *   oral     → "fellation" / "cunnilingus"
+ *   oralv    → "une fellation" / "un cunnilingus" (with article)
+ *   le       → "le" / "la"
+ *   il       → "il" / "elle"
+ *   adj / e  → "" / "e"              (accord masculin/féminin)
+ *   cum      → "éjaculer" / "mouiller"
+ *   cume     → "éjaculé" / "mouillée" (past participle)
+ *   touche   → "branler" / "doigter"
+ *   suc      → "sucer" / "lécher"
+ *   mon      → "mon" / "ma"
+ *   son      → "son" / "sa"
+ *   un       → "un" / "une"
  */
 export function renderCard(
   template: string,
@@ -58,58 +60,39 @@ export function renderCard(
 }
 
 function token(p: Player, kind: string): string {
+  const isM = p.sex === "M";
   switch (kind) {
     case "sexe":
-      return p.sex === "M" ? "pénis" : p.sex === "F" ? "clitoris" : "sexe";
+      return isM ? "pénis" : "clitoris";
     case "vulve":
-      return p.sex === "M" ? "pénis" : p.sex === "F" ? "vulve" : "sexe";
+      return isM ? "pénis" : "vulve";
     case "oral":
-      return p.sex === "M"
-        ? "fellation"
-        : p.sex === "F"
-        ? "cunnilingus"
-        : "oral";
+      return isM ? "fellation" : "cunnilingus";
     case "oralv":
-      return p.sex === "M"
-        ? "une fellation"
-        : p.sex === "F"
-        ? "un cunnilingus"
-        : "un oral";
+      return isM ? "une fellation" : "un cunnilingus";
     case "le":
-      return p.sex === "M" ? "le" : p.sex === "F" ? "la" : "le·a";
+      return isM ? "le" : "la";
     case "lui":
       return "lui";
     case "il":
-      return p.sex === "M" ? "il" : p.sex === "F" ? "elle" : "iel";
+      return isM ? "il" : "elle";
     case "adj":
-      return p.sex === "M" ? "" : p.sex === "F" ? "e" : "·e";
+    case "e":
+      return isM ? "" : "e";
     case "cum":
-      return p.sex === "M"
-        ? "éjaculer"
-        : p.sex === "F"
-        ? "mouiller"
-        : "jouir";
+      return isM ? "éjaculer" : "mouiller";
     case "cume":
-      // past participle of cum-like verb
-      return p.sex === "M"
-        ? "éjaculé"
-        : p.sex === "F"
-        ? "mouillée"
-        : "jouie";
+      return isM ? "éjaculé" : "mouillée";
     case "touche":
-      return p.sex === "M"
-        ? "branler"
-        : p.sex === "F"
-        ? "doigter"
-        : "caresser";
+      return isM ? "branler" : "doigter";
     case "suc":
-      return p.sex === "M" ? "sucer" : p.sex === "F" ? "lécher" : "goûter";
+      return isM ? "sucer" : "lécher";
     case "mon":
-      return p.sex === "M" ? "mon" : p.sex === "F" ? "ma" : "mon·a";
+      return isM ? "mon" : "ma";
     case "son":
-      return p.sex === "M" ? "son" : p.sex === "F" ? "sa" : "son·a";
+      return isM ? "son" : "sa";
     case "un":
-      return p.sex === "M" ? "un" : p.sex === "F" ? "une" : "un·e";
+      return isM ? "un" : "une";
     default:
       return "";
   }
