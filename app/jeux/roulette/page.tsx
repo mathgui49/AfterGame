@@ -39,14 +39,22 @@ export default function RoulettePage() {
     // Pick only among allowed sectors given the heat config
     const pool = allowedIdx.length ? allowedIdx : SECTORS.map((_, i) => i);
     const sectorIdx = pool[Math.floor(Math.random() * pool.length)];
-    // Needle points up at 0°. We want the chosen sector's center at 0°.
-    // Sector i covers [i*SEG ... (i+1)*SEG] starting at top, rotating clockwise.
-    // Its center angle (from top, clockwise) = i*SEG + SEG/2
-    // To align under the needle, we rotate the wheel by -(center) + full turns.
+    // Sector i covers [i*SEG ... (i+1)*SEG] going clockwise from the top.
+    // Its center, in the wheel's local coordinate system, sits at:
+    //   center = i*SEG + SEG/2   (clockwise degrees from top)
+    //
+    // After rotating the wheel by R degrees clockwise, that center ends up at
+    // visual angle (center + R) mod 360. For the chosen sector to land under
+    // the needle (visual 0°), we need:
+    //   center + (lastRot + delta)  ≡  0   (mod 360)
+    //   delta ≡  -(lastRot + center)   (mod 360)
+    // Add a few full turns so the spin animation feels right.
     const center = sectorIdx * SEG + SEG / 2;
-    const turns = 5 + Math.floor(Math.random() * 3); // 5..7
-    const newRot = turns * 360 + (360 - center);
-    const target = lastRot.current + newRot;
+    const turns = 5 + Math.floor(Math.random() * 3); // 5..7 full turns
+    const baseDelta =
+      ((-(lastRot.current + center)) % 360 + 360) % 360;
+    const delta = turns * 360 + baseDelta;
+    const target = lastRot.current + delta;
     lastRot.current = target;
     setRotation(target);
     window.setTimeout(() => {
