@@ -5,6 +5,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { LevelBadge } from "@/components/LevelBadge";
+import { PositionIllustration } from "@/components/PositionIllustration";
 import { TurnBar } from "@/components/TurnBar";
 import {
   CATEGORY_META,
@@ -239,7 +240,7 @@ export default function HotCardsPage() {
                     </div>
 
                     <p
-                      className="text-[22px] sm:text-[26px] leading-snug font-display font-medium [&_b]:text-ember-400 [&_b]:font-bold [&_b]:not-italic"
+                      className="text-[20px] sm:text-[24px] leading-snug font-display font-medium [&_b]:text-ember-400 [&_b]:font-bold [&_b]:not-italic"
                       dangerouslySetInnerHTML={{
                         __html: renderCard(
                           current.prompt,
@@ -255,6 +256,11 @@ export default function HotCardsPage() {
                         ),
                       }}
                     />
+                    {current.position && (
+                      <div className="mt-4 rounded-2xl border border-white/10 bg-white/[0.03] p-3">
+                        <PositionIllustration position={current.position} />
+                      </div>
+                    )}
 
 
                     <div className="flex items-center justify-between text-xs text-white/40">

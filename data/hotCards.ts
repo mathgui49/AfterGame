@@ -26,6 +26,12 @@ export interface HotCard {
    * ["debut", "couple"] since a one-night stand has no next week.
    */
   relationships?: Relationship[];
+  /**
+   * If set, the Hot Cards view renders a schematic illustration of this
+   * position alongside the prompt (see components/PositionIllustration.tsx
+   * for available IDs).
+   */
+  position?: string;
 }
 
 export const CATEGORY_META: Record<
@@ -189,20 +195,20 @@ export const HOT_CARDS: HotCard[] = [
   { id: "d3-04", category: "defis", level: 3, prompt: "Organiser une soirée jeu de rôle avec costume choisi par l'autre." },
 
   // ===== POSITIONS =====
-  { id: "p1-01", category: "positions", level: 1, prompt: "La cuillère : collé·e·s dans le dos, {partner:il} te caresse lentement." },
-  { id: "p1-02", category: "positions", level: 1, prompt: "Face à face allongé·e·s, vos jambes entrelacées, fronts contre fronts." },
-  { id: "p1-03", category: "positions", level: 1, prompt: "Assis·e sur ses genoux en canapé, bras autour du cou, vous vous embrassez longuement." },
-  { id: "p2-01", category: "positions", level: 2, prompt: "Le missionnaire revisité : avec ses jambes sur tes épaules." },
-  { id: "p2-02", category: "positions", level: 2, prompt: "La chaise : lui / elle assis·e, toi sur ses genoux face à lui / elle." },
-  { id: "p2-03", category: "positions", level: 2, prompt: "La levrette douce : en appui sur les avant-bras, tout en lenteur." },
-  { id: "p2-04", category: "positions", level: 2, prompt: "Lotus : assis·e·s face à face, jambes entrelacées, bercements synchronisés." },
-  { id: "p3-01", category: "positions", level: 3, prompt: "La brouette : elle en appui sur les mains, il lui tient les jambes." },
-  { id: "p3-02", category: "positions", level: 3, prompt: "L'Andromaque renversée : elle sur lui, dos à lui, elle mène la cadence." },
-  { id: "p3-03", category: "positions", level: 3, prompt: "Contre un mur : elle / lui jambes autour de sa taille, totalement porté·e." },
-  { id: "p3-04", category: "positions", level: 3, prompt: "La cathédrale : elle assise sur lui, lui allongé, elle mène le jeu." },
-  { id: "p3-05", category: "positions", level: 3, prompt: "La pince : {partner:il} sur le côté, l'autre perpendiculaire, les jambes serrées." },
-  { id: "p3-06", category: "positions", level: 3, prompt: "Le 69 classique : face à face inversé·e·s, chacun donne du plaisir à l'autre." },
-  { id: "p3-07", category: "positions", level: 3, prompt: "Le bord du lit : elle / lui au bord, l'autre debout, mains libres." },
+  { id: "p1-01", category: "positions", level: 1, prompt: "La cuillère : collé·e·s dans le dos, {partner:il} te caresse lentement.", position: "cuillere" },
+  { id: "p1-02", category: "positions", level: 1, prompt: "Face à face allongé·e·s, vos jambes entrelacées, fronts contre fronts.", position: "face-a-face" },
+  { id: "p1-03", category: "positions", level: 1, prompt: "Assis·e sur ses genoux en canapé, bras autour du cou, vous vous embrassez longuement.", position: "chaise" },
+  { id: "p2-01", category: "positions", level: 2, prompt: "Le missionnaire revisité : avec ses jambes sur tes épaules.", position: "missionnaire" },
+  { id: "p2-02", category: "positions", level: 2, prompt: "La chaise : {partner:il} assis·e, toi sur ses genoux face à {partner:lui}.", position: "chaise" },
+  { id: "p2-03", category: "positions", level: 2, prompt: "La levrette douce : en appui sur les avant-bras, tout en lenteur.", position: "levrette" },
+  { id: "p2-04", category: "positions", level: 2, prompt: "Lotus : assis·e·s face à face, jambes entrelacées, bercements synchronisés.", position: "lotus" },
+  { id: "p3-01", category: "positions", level: 3, prompt: "La brouette : elle en appui sur les mains, il lui tient les jambes.", position: "levrette" },
+  { id: "p3-02", category: "positions", level: 3, prompt: "L'Andromaque renversée : elle sur lui, dos à lui, elle mène la cadence.", position: "andromaque" },
+  { id: "p3-03", category: "positions", level: 3, prompt: "Contre un mur : {partner:il} jambes autour de sa taille, totalement porté{partner:e}.", position: "contre-mur" },
+  { id: "p3-04", category: "positions", level: 3, prompt: "La cathédrale : elle assise sur lui, lui allongé, elle mène le jeu.", position: "andromaque" },
+  { id: "p3-05", category: "positions", level: 3, prompt: "La pince : {partner:il} sur le côté, l'autre perpendiculaire, les jambes serrées.", position: "cote-a-cote" },
+  { id: "p3-06", category: "positions", level: 3, prompt: "Le 69 classique : face à face inversé·e·s, chacun donne du plaisir à l'autre.", position: "69" },
+  { id: "p3-07", category: "positions", level: 3, prompt: "Le bord du lit : {partner} au bord, l'autre debout, mains libres.", position: "bord-lit" },
 
   // ===== SI JE POUVAIS =====
   { id: "s1-01", category: "sijepouvais", level: 1, prompt: "Et si je pouvais t'offrir un week-end surprise demain… où irait-on ?" },
@@ -345,15 +351,15 @@ export const HOT_CARDS: HotCard[] = [
   { id: "d3-08", category: "defis", level: 3, prompt: "Dans 14 jours : rejouez un scénario de votre choix — tenues & rôles compris." },
 
   // ===== POSITIONS =====
-  { id: "p1-04", category: "positions", level: 1, prompt: "Tête contre tête, jambes enlacées, respirations synchronisées — rien d'autre." },
-  { id: "p1-05", category: "positions", level: 1, prompt: "Assis dos à dos, une main dans le dos de l'autre — rapprochez-vous lentement." },
-  { id: "p2-05", category: "positions", level: 2, prompt: "Le miroir : assis·e·s face à face, genoux repliés, mains posées l'une contre l'autre." },
-  { id: "p2-06", category: "positions", level: 2, prompt: "Debout enlacé·e·s, l'un·e porté·e sur l'autre contre un mur — simulez la danse." },
-  { id: "p2-07", category: "positions", level: 2, prompt: "Allongé·e·s côte à côte, bouche contre bouche, main entre les cuisses par-dessus les vêtements." },
-  { id: "p2-08", category: "positions", level: 2, prompt: "Amazone douce : à cheval sur ses cuisses, tu ondules lentement." },
-  { id: "p3-08", category: "positions", level: 3, prompt: "Le tabouret : l'un·e assis·e sur une chaise, l'autre à califourchon, rythme lent." },
-  { id: "p3-09", category: "positions", level: 3, prompt: "Assis·e sur la table, jambes écartées, partenaire debout — accès total." },
-  { id: "p3-10", category: "positions", level: 3, prompt: "La brouette assise : elle / il sur les cuisses, pieds posés de chaque côté des hanches." },
+  { id: "p1-04", category: "positions", level: 1, prompt: "Tête contre tête, jambes enlacées, respirations synchronisées — rien d'autre.", position: "face-a-face" },
+  { id: "p1-05", category: "positions", level: 1, prompt: "Assis dos à dos, une main dans le dos de l'autre — rapprochez-vous lentement.", position: "dos-a-dos" },
+  { id: "p2-05", category: "positions", level: 2, prompt: "Le miroir : assis·e·s face à face, genoux repliés, mains posées l'une contre l'autre.", position: "lotus" },
+  { id: "p2-06", category: "positions", level: 2, prompt: "Debout enlacé·e·s, l'un·e porté·e sur l'autre contre un mur — simulez la danse.", position: "contre-mur" },
+  { id: "p2-07", category: "positions", level: 2, prompt: "Allongé·e·s côte à côte, bouche contre bouche, main entre les cuisses par-dessus les vêtements.", position: "cote-a-cote" },
+  { id: "p2-08", category: "positions", level: 2, prompt: "Amazone douce : à cheval sur ses cuisses, tu ondules lentement.", position: "andromaque" },
+  { id: "p3-08", category: "positions", level: 3, prompt: "Le tabouret : l'un·e assis·e sur une chaise, l'autre à califourchon, rythme lent.", position: "chaise" },
+  { id: "p3-09", category: "positions", level: 3, prompt: "Assis·e sur la table, jambes écartées, partenaire debout — accès total.", position: "bord-lit" },
+  { id: "p3-10", category: "positions", level: 3, prompt: "La brouette assise : elle / il sur les cuisses, pieds posés de chaque côté des hanches.", position: "andromaque" },
 
   // ===== SI JE POUVAIS =====
   { id: "s1-03", category: "sijepouvais", level: 1, prompt: "Et si je pouvais t'organiser un rdv surprise ce week-end — tu aimerais plutôt dehors ou à la maison ?" },

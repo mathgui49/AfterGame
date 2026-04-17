@@ -83,14 +83,14 @@ export const HARD_CARDS: HotCard[] = [
   { id: "h-v-20", category: "verite", level: 3, prompt: "{you}, décris le corps de {partner} avec les mots les plus crus que tu connais." },
 
   // ===== POSITIONS — explicit =====
-  { id: "h-p-01", category: "positions", level: 3, prompt: "Doggy, tête au matelas, hanches en l'air — pénétration profonde, une main dans les cheveux de {partner}, l'autre sur son {partner:sexe}." },
-  { id: "h-p-02", category: "positions", level: 3, prompt: "69 inversé : celui/celle en dessous contrôle le rythme, l'autre se laisse faire." },
-  { id: "h-p-03", category: "positions", level: 3, prompt: "Cuillère en Y : un genou remonté sur le côté — accès total au {partner:sexe} en même temps que la pénétration." },
-  { id: "h-p-04", category: "positions", level: 3, prompt: "Andromaque : {you} à cheval sur {partner} — {you} mène, l'autre stimule son {partner:sexe} ou ses tétons." },
-  { id: "h-p-05", category: "positions", level: 3, prompt: "Bord du lit : {partner} allongé{partner:e} les cuisses largement ouvertes, {you} debout — alterne langue et pénétration." },
-  { id: "h-p-06", category: "positions", level: 3, prompt: "Face à face assis·e·s, enlacé·e·s : mouvements lents, son {partner:sexe} stimulé en continu par le frottement." },
-  { id: "h-p-07", category: "positions", level: 3, prompt: "Levrette debout contre un mur : {partner} plaqué{partner:e} dos à {you}, qui tient les hanches." },
-  { id: "h-p-08", category: "positions", level: 3, prompt: "La chaise inversée : {you} assis·e, {partner} face à toi les jambes autour de ta taille, stimulation croisée." },
+  { id: "h-p-01", category: "positions", level: 3, prompt: "Doggy, tête au matelas, hanches en l'air — pénétration profonde, une main dans les cheveux de {partner}, l'autre sur son {partner:sexe}.", position: "levrette" },
+  { id: "h-p-02", category: "positions", level: 3, prompt: "69 inversé : celui/celle en dessous contrôle le rythme, l'autre se laisse faire.", position: "69" },
+  { id: "h-p-03", category: "positions", level: 3, prompt: "Cuillère en Y : un genou remonté sur le côté — accès total au {partner:sexe} en même temps que la pénétration.", position: "cuillere" },
+  { id: "h-p-04", category: "positions", level: 3, prompt: "Andromaque : {you} à cheval sur {partner} — {you} mène, l'autre stimule son {partner:sexe} ou ses tétons.", position: "andromaque" },
+  { id: "h-p-05", category: "positions", level: 3, prompt: "Bord du lit : {partner} allongé{partner:e} les cuisses largement ouvertes, {you} debout — alterne langue et pénétration.", position: "bord-lit" },
+  { id: "h-p-06", category: "positions", level: 3, prompt: "Face à face assis·e·s, enlacé·e·s : mouvements lents, son {partner:sexe} stimulé en continu par le frottement.", position: "lotus" },
+  { id: "h-p-07", category: "positions", level: 3, prompt: "Levrette debout contre un mur : {partner} plaqué{partner:e} dos à {you}, qui tient les hanches.", position: "contre-mur" },
+  { id: "h-p-08", category: "positions", level: 3, prompt: "La chaise inversée : {you} assis·e, {partner} face à toi les jambes autour de ta taille, stimulation croisée.", position: "chaise" },
 
   // ===== QUI EST LE PLUS — crude =====
   { id: "h-q-01", category: "quiestleplus", level: 3, prompt: "Qui jouit le plus vite rien qu'avec des mots crus à l'oreille ?" },
@@ -142,10 +142,10 @@ export const HARD_CARDS: HotCard[] = [
   { id: "h-v-30", category: "verite", level: 3, prompt: "{you}, tu préfères faire l'amour le matin au réveil ou en pleine nuit ? Pourquoi ?" },
 
   // ===== POSITIONS — explicit (batch 2) =====
-  { id: "h-p-09", category: "positions", level: 3, prompt: "La pirouette : un quart de tour pour enchaîner cuillère → levrette sans se retirer." },
-  { id: "h-p-10", category: "positions", level: 3, prompt: "Le dessert : l'un·e allongé·e, l'autre à genoux en-dessous — alterne langue et doigts." },
-  { id: "h-p-11", category: "positions", level: 3, prompt: "Assis·e sur le rebord du canapé, l'autre à genoux au sol — accès total à ton {partner:sexe}." },
-  { id: "h-p-12", category: "positions", level: 3, prompt: "Le 69 debout contre un mur — l'un·e porté·e, l'autre tenant les cuisses." },
+  { id: "h-p-09", category: "positions", level: 3, prompt: "La pirouette : un quart de tour pour enchaîner cuillère → levrette sans se retirer.", position: "levrette" },
+  { id: "h-p-10", category: "positions", level: 3, prompt: "Le dessert : l'un·e allongé·e, l'autre à genoux en-dessous — alterne langue et doigts.", position: "bord-lit" },
+  { id: "h-p-11", category: "positions", level: 3, prompt: "Assis·e sur le rebord du canapé, l'autre à genoux au sol — accès total à ton {partner:sexe}.", position: "bord-lit" },
+  { id: "h-p-12", category: "positions", level: 3, prompt: "Le 69 debout contre un mur — l'un·e porté·e, l'autre tenant les cuisses.", position: "69" },
 
   // ===== QUI EST LE PLUS (batch 2) =====
   { id: "h-q-08", category: "quiestleplus", level: 3, prompt: "Qui craque le plus vite quand on lui mordille l'oreille ?" },
